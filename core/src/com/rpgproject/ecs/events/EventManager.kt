@@ -7,7 +7,6 @@ object EventManager {
 
     }
 
-    fun <T: Event> queue(event: T) {
-
+    fun <T: Event> queueEvent(event: T) {
     }
 }
