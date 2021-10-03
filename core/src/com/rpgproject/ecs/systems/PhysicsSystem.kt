@@ -1,4 +1,4 @@
 package com.rpgproject.ecs.systems
 
-class PhysicsSystem {
+class PhysicsSystem { //this should be a normal processing system
 }

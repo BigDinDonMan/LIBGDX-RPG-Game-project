@@ -10,6 +10,8 @@ object DesktopLauncher {
     fun main(arg: Array<String>) {
         val config = LwjglApplicationConfiguration().apply {
             foregroundFPS = 60
+            width = 1366
+            height = 768
 //            fullscreen = true
         }
         LwjglApplication(RPGProjectGame(), config)
