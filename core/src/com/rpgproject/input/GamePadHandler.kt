@@ -1,4 +1,6 @@
 package com.rpgproject.input
 
-class GamePadHandler {
+import ktx.app.KtxInputAdapter
+
+class GamePadHandler : KtxInputAdapter {
 }
