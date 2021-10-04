@@ -55,6 +55,11 @@ project(":desktop") {
         implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
         implementation "io.github.libktx:ktx-app:$ktxVersion"
         implementation "io.github.libktx:ktx-scene2d:$ktxVersion"
+        implementation "io.github.libktx:ktx-collections:$ktxVersion"
+        implementation "io.github.libktx:ktx-box2d:$ktxVersion"
+        implementation "io.github.libktx:ktx-json:$ktxVersion"
+        implementation "io.github.libktx:ktx-ashley:$ktxVersion"
+        implementation "io.github.libktx:ktx-actors:$ktxVersion"
     }
 }
 
@@ -74,5 +79,10 @@ project(":core") {
         implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
         implementation "io.github.libktx:ktx-app:$ktxVersion"
         implementation "io.github.libktx:ktx-scene2d:$ktxVersion"
+        implementation "io.github.libktx:ktx-collections:$ktxVersion"
+        implementation "io.github.libktx:ktx-box2d:$ktxVersion"
+        implementation "io.github.libktx:ktx-json:$ktxVersion"
+        implementation "io.github.libktx:ktx-ashley:$ktxVersion"
+        implementation "io.github.libktx:ktx-actors:$ktxVersion"
     }
 }
