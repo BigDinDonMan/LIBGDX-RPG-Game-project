@@ -5,10 +5,10 @@ import com.badlogic.ashley.core.Family
 import com.badlogic.ashley.systems.IteratingSystem
 import java.util.LinkedList
 
-abstract class EventSystem<T: Event> : IteratingSystem(Family.all().get()) {
+abstract class EventSystem : IteratingSystem(Family.all().get()) {
 
-    protected val queuedEvents = LinkedList<T>()
-    protected val currentEventBatch = LinkedList<T>()
+    protected val queuedEvents = LinkedList<Event>()
+    protected val currentEventBatch = LinkedList<Event>()
 
     override fun processEntity(entity: Entity?, deltaTime: Float) {} //dont do anything, this system only processes events
     override fun update(deltaTime: Float) {
@@ -19,10 +19,10 @@ abstract class EventSystem<T: Event> : IteratingSystem(Family.all().get()) {
         queuedEvents.clear()
     }
 
-    fun queueEvent(e: T) {
+    fun queueEvent(e: Event) {
         queuedEvents += e
     }
 
     //this function should be implemented by each of
-    abstract fun processEvent(e: T)
+    abstract fun processEvent(e: Event)
 }
