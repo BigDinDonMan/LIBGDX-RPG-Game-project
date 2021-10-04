@@ -8,8 +8,8 @@ import kotlin.reflect.KClass
 //register systems and types of events they should listen for
 object EventManager {
 
-    private val systemsEventData = ObjectMap<KClass<EventSystem>, Array<KClass<Event>>>()
-    private val registeredSystems = ObjectMap<KClass<EventSystem>, EventSystem>()
+    private val systemsEventData = ObjectMap<KClass<out EventSystem>, Array<KClass<out Event>>>()
+    private val registeredSystems = ObjectMap<KClass<out EventSystem>, EventSystem>()
 
     private val systemsList = ArrayList<EventSystem>()
 
@@ -24,7 +24,7 @@ object EventManager {
         systemsEventData.filter { eventClass in it.value }.forEach { e -> systemsList.add(registeredSystems[e.key]) }
     }
 
-    private fun registerSystem(system: EventSystem, systemClass: KClass<EventSystem>, vararg listensFor: KClass<Event>) {
+    fun registerSystem(system: EventSystem, systemClass: KClass<out EventSystem>, vararg listensFor: KClass<out Event>) {
         systemsEventData.put(systemClass, arrayOf(*listensFor))
         registeredSystems.put(systemClass, system)
     }

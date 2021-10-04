@@ -16,5 +16,5 @@ object Mappers {
         classMappers[_class] = ComponentMapper.getFor(_class)
     }
 
-    inline fun <reified T: Component> getComponent(e: Entity) = classMappers[T::class.java]?.get(e)
+    inline fun <reified T: Component> getComponent(e: Entity): T = classMappers.getValue(T::class.java).get(e) as T
 }
