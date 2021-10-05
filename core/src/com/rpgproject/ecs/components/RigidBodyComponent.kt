@@ -1,6 +1,5 @@
 package com.rpgproject.ecs.components
 
-import com.badlogic.ashley.core.Component
+import com.artemis.Component
 
-class RigidBodyComponent : Component {
-}
+class RigidBodyComponent : Component()
