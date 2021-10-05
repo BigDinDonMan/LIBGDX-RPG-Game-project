@@ -27,6 +27,7 @@ allprojects {
         aiVersion = '1.8.2'
         gdxControllersVersion = '2.1.0'
         ktxVersion = '1.10.0-b1'
+        artemisVersion = "2.4.0"
     }
 
     repositories {
@@ -60,6 +61,8 @@ project(":desktop") {
         implementation "io.github.libktx:ktx-json:$ktxVersion"
         implementation "io.github.libktx:ktx-ashley:$ktxVersion"
         implementation "io.github.libktx:ktx-actors:$ktxVersion"
+        implementation "io.github.libktx:ktx-graphics:$ktxVersion"
+        implementation "net.onedaybeard.artemis:artemis-odb:$artemisVersion"
     }
 }
 
@@ -84,5 +87,7 @@ project(":core") {
         implementation "io.github.libktx:ktx-json:$ktxVersion"
         implementation "io.github.libktx:ktx-ashley:$ktxVersion"
         implementation "io.github.libktx:ktx-actors:$ktxVersion"
+        implementation "io.github.libktx:ktx-graphics:$ktxVersion"
+        implementation "net.onedaybeard.artemis:artemis-odb:$artemisVersion"
     }
 }
