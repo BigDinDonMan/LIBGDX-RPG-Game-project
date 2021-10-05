@@ -1,16 +1,12 @@
 package com.rpgproject
 
-import com.badlogic.ashley.core.Engine
+import com.artemis.WorldConfigurationBuilder
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.Screen
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
-import com.rpgproject.ecs.components.HealthComponent
-import com.rpgproject.ecs.components.PlayerComponent
-import com.rpgproject.ecs.components.levelling.LevelDataComponent
-import com.rpgproject.screens.GameScreen
 import com.rpgproject.screens.MainMenuScreen
-import com.rpgproject.util.Mappers
+import com.rpgproject.util.EcsWorld
 import ktx.app.KtxGame
 import ktx.app.clearScreen
 import kotlin.system.exitProcess
@@ -18,16 +14,16 @@ import kotlin.system.exitProcess
 class RPGProjectGame : KtxGame<Screen>() {
 
     private lateinit var batch: SpriteBatch
-    private lateinit var engine: Engine
+    private lateinit var ecsWorld: EcsWorld
 
     override fun create() {
         batch = SpriteBatch()
-        engine = Engine()
+        val config = WorldConfigurationBuilder().build()
+
+        ecsWorld = EcsWorld(config)
 
         addScreen(MainMenuScreen())
-        addScreen(GameScreen(engine))
-        registerMappers()
-        setScreen<GameScreen>()
+        setScreen<MainMenuScreen>()
     }
 
     override fun render() {
@@ -41,11 +37,6 @@ class RPGProjectGame : KtxGame<Screen>() {
 
     override fun dispose() {
         batch.dispose()
-    }
-
-    private fun registerMappers() {
-        Mappers.registerFor(PlayerComponent::class.java)
-        Mappers.registerFor(LevelDataComponent::class.java)
-        Mappers.registerFor(HealthComponent::class.java)
+        ecsWorld.dispose()
     }
 }
