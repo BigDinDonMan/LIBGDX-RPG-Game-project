@@ -29,7 +29,13 @@ class RPGProjectGame : KtxGame<Screen>() {
     private lateinit var mainCamera: OrthographicCamera
     private lateinit var serializationManager: WorldSerializationManager
 
+    companion object {
+        lateinit var GameInstance: RPGProjectGame
+        lateinit var EventBus: EventSystem
+    }
+
     override fun create() {
+        GameInstance = this
         batch = SpriteBatch()
         mainCamera = OrthographicCamera(Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat())
         physicsWorld = PhysicsWorld(Vector2(0f, -10f), false)
@@ -68,7 +74,8 @@ class RPGProjectGame : KtxGame<Screen>() {
                         RenderSystem(batch, mainCamera),
                         CollisionHandlingSystem())
                 .build()
-        config.setSystem(EventSystem::class.java)
+        EventBus = EventSystem()
+        config.setSystem(EventBus)
         config.setSystem(serializationManager)
         ecsWorld = EcsWorld(config)
         serializationManager.setSerializer(JsonArtemisSerializer(ecsWorld))
