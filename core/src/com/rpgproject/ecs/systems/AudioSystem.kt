@@ -1,3 +1,3 @@
 package com.rpgproject.ecs.systems
 
-class PlayerInputSystem
+class AudioSystem

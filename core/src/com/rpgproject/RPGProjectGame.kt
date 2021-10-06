@@ -1,33 +1,50 @@
 package com.rpgproject
 
-import com.badlogic.ashley.core.Engine
+import com.artemis.WorldConfigurationBuilder
+import com.artemis.io.JsonArtemisSerializer
+import com.artemis.managers.WorldSerializationManager
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.Screen
+import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
-import com.rpgproject.ecs.components.HealthComponent
-import com.rpgproject.ecs.components.PlayerComponent
-import com.rpgproject.ecs.components.levelling.LevelDataComponent
-import com.rpgproject.screens.GameScreen
+import com.badlogic.gdx.math.Vector2
+import com.rpgproject.ecs.systems.CollisionHandlingSystem
+import com.rpgproject.ecs.systems.PhysicsSystem
+import com.rpgproject.ecs.systems.RenderSystem
 import com.rpgproject.screens.MainMenuScreen
-import com.rpgproject.util.Mappers
+import com.rpgproject.util.EcsWorld
+import com.rpgproject.util.PhysicsWorld
+import com.rpgproject.util.physics.CollisionListener
 import ktx.app.KtxGame
 import ktx.app.clearScreen
+import net.mostlyoriginal.api.event.common.EventSystem
 import kotlin.system.exitProcess
 
 class RPGProjectGame : KtxGame<Screen>() {
 
     private lateinit var batch: SpriteBatch
-    private lateinit var engine: Engine
+    private lateinit var ecsWorld: EcsWorld
+    private lateinit var physicsWorld: PhysicsWorld
+    private lateinit var mainCamera: OrthographicCamera
+    private lateinit var serializationManager: WorldSerializationManager
+
+    companion object {
+        lateinit var GameInstance: RPGProjectGame
+        lateinit var EventBus: EventSystem
+    }
 
     override fun create() {
+        GameInstance = this
         batch = SpriteBatch()
-        engine = Engine()
+        mainCamera = OrthographicCamera(Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat())
+        physicsWorld = PhysicsWorld(Vector2(0f, -10f), false)
+        initArtemis()
+        physicsWorld.setContactListener(CollisionListener(ecsWorld.getSystem(EventSystem::class.java)))
+
 
         addScreen(MainMenuScreen())
-        addScreen(GameScreen(engine))
-        registerMappers()
-        setScreen<GameScreen>()
+        setScreen<MainMenuScreen>()
     }
 
     override fun render() {
@@ -36,16 +53,31 @@ class RPGProjectGame : KtxGame<Screen>() {
             Gdx.app.exit()
             exitProcess(0)
         }
+//        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+//            val e = ecsWorld.createEntity()
+//            ecsWorld.getSystem(EventSystem::class.java).dispatch(object: EntityEvent(e) {})
+//        }
         currentScreen.render(Gdx.graphics.deltaTime)
     }
 
     override fun dispose() {
         batch.dispose()
+        ecsWorld.dispose()
+        physicsWorld.dispose()
     }
 
-    private fun registerMappers() {
-        Mappers.registerFor(PlayerComponent::class.java)
-        Mappers.registerFor(LevelDataComponent::class.java)
-        Mappers.registerFor(HealthComponent::class.java)
+    private fun initArtemis() {
+        serializationManager = WorldSerializationManager()
+        val config = WorldConfigurationBuilder()
+                .with(
+                        PhysicsSystem(physicsWorld, 6, 2),
+                        RenderSystem(batch, mainCamera),
+                        CollisionHandlingSystem())
+                .build()
+        EventBus = EventSystem()
+        config.setSystem(EventBus)
+        config.setSystem(serializationManager)
+        ecsWorld = EcsWorld(config)
+        serializationManager.setSerializer(JsonArtemisSerializer(ecsWorld))
     }
 }
