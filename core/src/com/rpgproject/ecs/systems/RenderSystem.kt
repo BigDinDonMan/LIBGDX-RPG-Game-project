@@ -30,6 +30,10 @@ class RenderSystem(private val spriteBatch: SpriteBatch, private val camera: Cam
 
     override fun process(e: Entity) {
         //draw entities heeeere
+        val transform = transformMapper.get(e)
+        val texture = textureMapper.get(e)
+        if (texture.texture == null) return
+        spriteBatch.draw(texture.texture, transform.position.x, transform.position.y)
     }
 
     override fun end() {
