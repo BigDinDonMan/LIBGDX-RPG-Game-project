@@ -9,11 +9,13 @@ import com.badlogic.gdx.Screen
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.Vector2
+import com.rpgproject.ecs.systems.CollisionHandlingSystem
 import com.rpgproject.ecs.systems.PhysicsSystem
 import com.rpgproject.ecs.systems.RenderSystem
 import com.rpgproject.screens.MainMenuScreen
 import com.rpgproject.util.EcsWorld
 import com.rpgproject.util.PhysicsWorld
+import com.rpgproject.util.physics.CollisionListener
 import ktx.app.KtxGame
 import ktx.app.clearScreen
 import net.mostlyoriginal.api.event.common.EventSystem
@@ -32,6 +34,7 @@ class RPGProjectGame : KtxGame<Screen>() {
         mainCamera = OrthographicCamera(Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat())
         physicsWorld = PhysicsWorld(Vector2(0f, -10f), false)
         initArtemis()
+        physicsWorld.setContactListener(CollisionListener(ecsWorld.getSystem(EventSystem::class.java)))
 
 
         addScreen(MainMenuScreen())
@@ -44,6 +47,10 @@ class RPGProjectGame : KtxGame<Screen>() {
             Gdx.app.exit()
             exitProcess(0)
         }
+//        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+//            val e = ecsWorld.createEntity()
+//            ecsWorld.getSystem(EventSystem::class.java).dispatch(object: EntityEvent(e) {})
+//        }
         currentScreen.render(Gdx.graphics.deltaTime)
     }
 
@@ -58,7 +65,8 @@ class RPGProjectGame : KtxGame<Screen>() {
         val config = WorldConfigurationBuilder()
                 .with(
                         PhysicsSystem(physicsWorld, 6, 2),
-                        RenderSystem(batch, mainCamera))
+                        RenderSystem(batch, mainCamera),
+                        CollisionHandlingSystem())
                 .build()
         config.setSystem(EventSystem::class.java)
         config.setSystem(serializationManager)

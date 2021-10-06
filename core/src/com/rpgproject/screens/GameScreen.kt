@@ -1,10 +1,9 @@
 package com.rpgproject.screens
 
 import com.rpgproject.util.EcsWorld
-import com.rpgproject.util.PhysicsWorld
 import ktx.app.KtxScreen
 
-class GameScreen(private val ecsWorld: EcsWorld, private val physicsWorld: PhysicsWorld) : KtxScreen {
+class GameScreen(private val ecsWorld: EcsWorld) : KtxScreen {
 
     override fun dispose() {
     }
