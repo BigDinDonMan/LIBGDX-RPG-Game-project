@@ -1,5 +1,6 @@
 package com.rpgproject.ecs.systems
 
+import com.artemis.ComponentMapper
 import com.artemis.annotations.All
 import com.artemis.systems.IteratingSystem
 import com.badlogic.gdx.Gdx
@@ -13,6 +14,9 @@ class PhysicsSystem(private val physicsWorld: PhysicsWorld, private val velocity
     private val TIME_STEP = 1 / 300f
     private var accumulator = 0f
 
+    var rigidBodyMapper: ComponentMapper<RigidBodyComponent>? = null
+    var transformMapper: ComponentMapper<TransformComponent>? = null
+
     override fun begin() {
         val delta = Gdx.graphics.deltaTime
         accumulator += delta
@@ -23,6 +27,15 @@ class PhysicsSystem(private val physicsWorld: PhysicsWorld, private val velocity
     }
 
     override fun process(entityId: Int) {
+        val entityRigidBody = rigidBodyMapper!!.get(entityId)
+        val entityTransform = transformMapper!!.get(entityId)
 
+        val z = entityTransform.position.z
+
+        entityTransform.position.set(
+                entityRigidBody.physicsBody!!.position.x - entityTransform.width() / 2,
+                entityRigidBody.physicsBody!!.position.y - entityTransform.height() / 2,
+                z
+        )
     }
 }

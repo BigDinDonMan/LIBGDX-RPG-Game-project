@@ -8,12 +8,10 @@ import com.badlogic.gdx.Input
 import com.badlogic.gdx.Screen
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.OrthographicCamera
-import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.Vector2
-import com.rpgproject.ecs.systems.CollisionHandlingSystem
-import com.rpgproject.ecs.systems.PhysicsSystem
-import com.rpgproject.ecs.systems.RenderSystem
+import com.badlogic.gdx.physics.box2d.Box2D
+import com.rpgproject.ecs.systems.*
 import com.rpgproject.screens.GameScreen
 import com.rpgproject.screens.MainMenuScreen
 import com.rpgproject.util.EcsWorld
@@ -39,8 +37,9 @@ class RPGProjectGame : KtxGame<Screen>() {
     }
 
     override fun create() {
+        Box2D.init()
         Instance = this
-        assetManager = AssetManager().apply { load("Jester.png", Texture::class.java) }.apply { finishLoading() }
+        assetManager = AssetManager()
         batch = SpriteBatch()
         mainCamera = OrthographicCamera(Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat())
         physicsWorld = PhysicsWorld(Vector2(0f, -10f), false)
@@ -49,8 +48,8 @@ class RPGProjectGame : KtxGame<Screen>() {
 
 
         addScreen(MainMenuScreen())
-        addScreen(GameScreen(ecsWorld))
-        setScreen<MainMenuScreen>()
+        addScreen(GameScreen(ecsWorld, physicsWorld, eventBus))
+        setScreen<GameScreen>()
     }
 
     override fun render() {
@@ -80,7 +79,9 @@ class RPGProjectGame : KtxGame<Screen>() {
         serializationManager = WorldSerializationManager()
         val config = WorldConfigurationBuilder()
                 .with(
+                        PlayerInputSystem(physicsWorld, mainCamera),
                         PhysicsSystem(physicsWorld, 6, 2),
+                        PhysicsDebugSystem(physicsWorld, mainCamera),
                         RenderSystem(batch, mainCamera),
                         CollisionHandlingSystem())
                 .build()

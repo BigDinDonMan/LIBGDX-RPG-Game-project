@@ -2,9 +2,9 @@ package com.rpgproject.input
 
 import com.badlogic.gdx.controllers.Controller
 import com.badlogic.gdx.controllers.ControllerAdapter
-import ktx.app.KtxInputAdapter
+import net.mostlyoriginal.api.event.common.EventSystem
 
-class GamePadHandler : ControllerAdapter() {
+class GamePadHandler(val eventSystem: EventSystem) : ControllerAdapter() {
 
     override fun connected(controller: Controller?) {
         super.connected(controller)

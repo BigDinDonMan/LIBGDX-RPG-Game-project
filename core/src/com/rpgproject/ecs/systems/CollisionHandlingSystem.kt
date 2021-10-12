@@ -1,8 +1,6 @@
 package com.rpgproject.ecs.systems
 
 import com.artemis.BaseSystem
-import com.rpgproject.ecs.events.EntityEvent
-import net.mostlyoriginal.api.event.common.Subscribe
 
 class CollisionHandlingSystem : BaseSystem() {
 
@@ -15,10 +13,5 @@ class CollisionHandlingSystem : BaseSystem() {
 
     override fun end() {
 
-    }
-
-    @Subscribe
-    fun receiveEvent(e: EntityEvent) {
-        println(e::class)
     }
 }
