@@ -4,17 +4,15 @@ import com.artemis.ComponentMapper
 import com.artemis.annotations.All
 import com.artemis.annotations.Wire
 import com.artemis.systems.IteratingSystem
-import com.badlogic.gdx.graphics.Camera
 import com.badlogic.gdx.math.Vector2
 import com.rpgproject.ecs.components.PlayerComponent
 import com.rpgproject.ecs.components.RigidBodyComponent
 import com.rpgproject.ecs.components.TransformComponent
 import com.rpgproject.ecs.events.specific.PlayerInputEvent
-import com.rpgproject.util.PhysicsWorld
 import net.mostlyoriginal.api.event.common.Subscribe
 
 @All(PlayerComponent::class)
-class PlayerInputSystem(val physicsWorld: PhysicsWorld, val playerCamera: Camera) : IteratingSystem() {
+class PlayerInputSystem : IteratingSystem() {
 
     @Wire
     var transformMapper: ComponentMapper<TransformComponent>? = null
@@ -35,7 +33,12 @@ class PlayerInputSystem(val physicsWorld: PhysicsWorld, val playerCamera: Camera
     override fun process(entityId: Int) {
         val rigidBody = rigidBodyMapper!!.get(entityId)
         val player = playerMapper!!.get(entityId)
-        rigidBody.physicsBody!!.applyLinearImpulse(playerMoveDirection.x * player.speed, playerMoveDirection.y * player.speed, rigidBody.physicsBody!!.position.x, rigidBody.physicsBody!!.position.y, true)
-        println(playerMoveDirection)
+        //todo: increase friction/mass/linear damping because its really fast (or maybe clamp velocity?)
+        rigidBody.physicsBody!!.applyLinearImpulse(
+                playerMoveDirection.x * player.speed,
+                playerMoveDirection.y * player.speed,
+                rigidBody.physicsBody!!.position.x,
+                rigidBody.physicsBody!!.position.y,
+                true)
     }
 }

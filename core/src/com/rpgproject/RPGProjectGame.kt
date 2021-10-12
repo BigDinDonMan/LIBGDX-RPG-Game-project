@@ -55,7 +55,6 @@ class RPGProjectGame : KtxGame<Screen>() {
     override fun render() {
         clearScreen(0f, 0f, 0f)
         mainCamera.update()
-        ecsWorld.process()
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
             Gdx.app.exit()
             exitProcess(0)
@@ -79,7 +78,8 @@ class RPGProjectGame : KtxGame<Screen>() {
         serializationManager = WorldSerializationManager()
         val config = WorldConfigurationBuilder()
                 .with(
-                        PlayerInputSystem(physicsWorld, mainCamera),
+                        PlayerInputSystem(),
+                        CameraMovementSystem(mainCamera, 0.6f),
                         PhysicsSystem(physicsWorld, 6, 2),
                         PhysicsDebugSystem(physicsWorld, mainCamera),
                         RenderSystem(batch, mainCamera),
