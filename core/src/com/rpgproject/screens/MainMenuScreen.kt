@@ -1,17 +1,16 @@
 package com.rpgproject.screens
 
+import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.graphics.Camera
+import com.badlogic.gdx.utils.viewport.StretchViewport
 import ktx.app.KtxScreen
 
-class MainMenuScreen : KtxScreen {
-    override fun resize(width: Int, height: Int) {
-        super.resize(width, height)
-    }
+//add viewport to handle resizing
+//add camera to the constructor
+class MainMenuScreen(val camera: Camera) : KtxScreen {
 
-    override fun dispose() {
-        super.dispose()
-    }
+    private val viewport = StretchViewport(Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat(), camera)
 
-    override fun render(delta: Float) {
-        super.render(delta)
-    }
+    override fun resize(width: Int, height: Int) = viewport.update(width, height)
+
 }

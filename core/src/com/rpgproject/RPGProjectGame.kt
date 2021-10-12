@@ -47,8 +47,8 @@ class RPGProjectGame : KtxGame<Screen>() {
         physicsWorld.setContactListener(CollisionListener(eventBus))
 
 
-        addScreen(MainMenuScreen())
-        addScreen(GameScreen(ecsWorld, physicsWorld, eventBus))
+        addScreen(MainMenuScreen(mainCamera))
+        addScreen(GameScreen(ecsWorld, physicsWorld, eventBus, mainCamera))
         setScreen<GameScreen>()
     }
 

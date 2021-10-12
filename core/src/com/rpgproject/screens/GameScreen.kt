@@ -2,9 +2,11 @@ package com.rpgproject.screens
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.InputMultiplexer
+import com.badlogic.gdx.graphics.Camera
 import com.badlogic.gdx.physics.box2d.BodyDef
 import com.badlogic.gdx.physics.box2d.FixtureDef
 import com.badlogic.gdx.physics.box2d.PolygonShape
+import com.badlogic.gdx.utils.viewport.StretchViewport
 import com.rpgproject.ecs.components.PlayerComponent
 import com.rpgproject.ecs.components.RigidBodyComponent
 import com.rpgproject.ecs.components.TransformComponent
@@ -14,7 +16,10 @@ import com.rpgproject.util.PhysicsWorld
 import ktx.app.KtxScreen
 import net.mostlyoriginal.api.event.common.EventSystem
 
-class GameScreen(private val ecsWorld: EcsWorld, private val physicsWorld: PhysicsWorld, private val eventSystem: EventSystem) : KtxScreen {
+// same here, add camera & viewport to handle resizing
+class GameScreen(private val ecsWorld: EcsWorld, private val physicsWorld: PhysicsWorld, private val eventSystem: EventSystem, private val camera: Camera) : KtxScreen {
+
+    private val viewport = StretchViewport(Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat(), camera)
 
     init {
         spawnTestEntities()
@@ -50,4 +55,5 @@ class GameScreen(private val ecsWorld: EcsWorld, private val physicsWorld: Physi
         ecsWorld.setDelta(delta).apply { ecsWorld.process() }
     }
 
+    override fun resize(width: Int, height: Int) = viewport.update(width, height)
 }
