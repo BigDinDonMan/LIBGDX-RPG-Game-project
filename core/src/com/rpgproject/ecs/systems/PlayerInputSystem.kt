@@ -25,6 +25,8 @@ class PlayerInputSystem : IteratingSystem() {
 
     var playerMoveDirection = Vector2()
 
+    private val MAX_VELOCITY = Vector2(10f, 10f)
+
     @Subscribe
     fun getPlayerInput(e: PlayerInputEvent) {
         playerMoveDirection.set(e.lookDirectionX, e.lookDirectionY)

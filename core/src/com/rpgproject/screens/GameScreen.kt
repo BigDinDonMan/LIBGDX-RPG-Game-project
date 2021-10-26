@@ -33,6 +33,7 @@ class GameScreen(private val ecsWorld: EcsWorld, private val physicsWorld: Physi
         }).add(RigidBodyComponent().apply {
             val bodyDef = BodyDef().apply {
                 gravityScale = 0f
+                linearDamping = 6f
                 type = BodyDef.BodyType.DynamicBody
             }
             val shape = PolygonShape().apply { setAsBox(transform.width() / 2, transform.height() / 2) }
