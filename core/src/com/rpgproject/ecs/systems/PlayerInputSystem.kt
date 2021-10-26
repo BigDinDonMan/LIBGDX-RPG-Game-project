@@ -25,22 +25,31 @@ class PlayerInputSystem : IteratingSystem() {
 
     var playerMoveDirection = Vector2()
 
-    private val MAX_VELOCITY = Vector2(10f, 10f)
+    var dodge = false
+    var attack = false
 
     @Subscribe
     fun getPlayerInput(e: PlayerInputEvent) {
         playerMoveDirection.set(e.lookDirectionX, e.lookDirectionY)
+        dodge = e.dodge
+        attack = e.attack
     }
 
     override fun process(entityId: Int) {
         val rigidBody = rigidBodyMapper!!.get(entityId)
         val player = playerMapper!!.get(entityId)
-        //todo: increase friction/mass/linear damping because its really fast (or maybe clamp velocity?)
         rigidBody.physicsBody!!.applyLinearImpulse(
                 playerMoveDirection.x * player.speed,
                 playerMoveDirection.y * player.speed,
                 rigidBody.physicsBody!!.position.x,
                 rigidBody.physicsBody!!.position.y,
                 true)
+        //todo: handle player dodge here (add impulse and block spacebar key)
+        if (dodge) {
+            dodge = false
+        }
+        if (attack) {
+            attack = false
+        }
     }
 }
