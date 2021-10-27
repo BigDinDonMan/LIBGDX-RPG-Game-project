@@ -1,9 +1,14 @@
 package com.rpgproject.ecs.components
 
 import com.artemis.Component
+import java.util.*
 
 class AttackComponent : Component() {
     var attackDamage = 0f
+    var attackRange = 0f
     var currentCooldown = 0f
-    //todo: add array (or queue? and add popped element at the back) of attack cooldowns (so that combos are available for implementation)
+    var cooldowns = LinkedList<Int>() //this will store cooldowns of each consecutive attack (remove at start, add to the back)
+
+    //todo: add a list of entity types that can be damaged by the attacks
+    var damagableEntityTypes = ArrayList<String>()
 }
