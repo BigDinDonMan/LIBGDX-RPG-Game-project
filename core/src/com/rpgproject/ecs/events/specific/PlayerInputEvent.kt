@@ -9,5 +9,6 @@ class PlayerInputEvent(
         val lookDirectionX: Float,
         val lookDirectionY: Float,
         val dodge: Boolean,
-        val attack: Boolean
+        val attack: Boolean,
+        val interaction: Boolean
 ) : EntityEvent(targetEntity)
