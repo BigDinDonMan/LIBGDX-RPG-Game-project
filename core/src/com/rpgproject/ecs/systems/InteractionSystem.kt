@@ -22,5 +22,8 @@ class InteractionSystem : BaseEntitySystem() {
         // and then highlight it and handle interaction when E (keyboard)/X (gamepad) is pressed
         // set outline shader/highlight color in selected element's texture component
         // different interactables should have different border colors
+        for (i in 0..subscription.entities.size()) {
+
+        }
     }
 }
