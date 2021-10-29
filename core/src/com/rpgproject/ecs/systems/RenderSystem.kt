@@ -35,6 +35,8 @@ class RenderSystem(private val spriteBatch: SpriteBatch, private val camera: Cam
         val transform = transformMapper?.get(entityId)
         val texture = textureMapper?.get(entityId)
         if (texture?.texture == null) return
+        spriteBatch.color = texture.color
+        spriteBatch.shader = texture.shader
         spriteBatch.draw(texture.texture, transform!!.position.x, transform.position.y)
     }
 
