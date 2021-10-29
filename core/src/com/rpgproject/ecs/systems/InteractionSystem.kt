@@ -16,6 +16,9 @@ class InteractionSystem : BaseEntitySystem() {
     }
 
     override fun processSystem() {
-
+        // calculate distance from player for each of the entities and select the closest one
+        // and then highlight it and handle interaction when E (keyboard)/X (gamepad) is pressed
+        // set outline shader/highlight color in selected element's texture component
+        // different interactables should have different border colors
     }
 }

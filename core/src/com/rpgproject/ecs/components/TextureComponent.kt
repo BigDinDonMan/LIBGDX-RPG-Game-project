@@ -5,4 +5,5 @@ import com.badlogic.gdx.graphics.Texture
 
 class TextureComponent : Component() {
     var texture: Texture? = null
+    //maybe add optional shader & color?
 }

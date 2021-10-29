@@ -53,7 +53,7 @@ class RPGProjectGame : KtxGame<Screen>() {
     }
 
     override fun render() {
-        clearScreen(0f, 0f, 0f)
+        clearScreen(1f, 1f, 1f)
         mainCamera.update()
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
             Gdx.app.exit()
