@@ -42,8 +42,10 @@ class RenderSystem(private val spriteBatch: SpriteBatch, private val camera: Cam
         if (texture?.texture == null) return
         spriteBatch.color = texture.color
         if (shaderComp != null) {
-            applyShaderParams(shaderComp)
             spriteBatch.shader = shaderComp.shader
+            applyShaderParams(shaderComp)
+        } else {
+            spriteBatch.shader = null
         }
         spriteBatch.draw(texture.texture, transform!!.position.x, transform.position.y)
     }
@@ -53,6 +55,13 @@ class RenderSystem(private val spriteBatch: SpriteBatch, private val camera: Cam
     }
 
     private fun applyShaderParams(shaderComponent: ShaderComponent) {
-
+        val shader = shaderComponent.shader ?: return
+        val params = shaderComponent.shaderParams
+        for (entry in params.entries) {
+            val glType = entry.key
+            for (varEntry in entry.value.entries) {
+                glType.apply(shader, varEntry.key, varEntry.value)
+            }
+        }
     }
 }

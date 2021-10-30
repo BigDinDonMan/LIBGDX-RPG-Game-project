@@ -10,7 +10,9 @@ import com.rpgproject.ecs.components.ShaderComponent
 import com.rpgproject.ecs.components.TextureComponent
 import com.rpgproject.ecs.components.TransformComponent
 import com.rpgproject.ecs.events.specific.PlayerInputEvent
+import com.rpgproject.util.GLType
 import com.rpgproject.util.assets.ShaderStorage
+import com.rpgproject.util.collections.set
 import com.rpgproject.util.math.distance
 import net.mostlyoriginal.api.event.common.Subscribe
 
@@ -70,7 +72,10 @@ class InteractionSystem : BaseEntitySystem() {
         if (shaderComponent != null) {
             val outlineShader = ShaderStorage["Outline"]
             shaderComponent.shader = outlineShader
-            //todo: set shader params here
+            //defaults wont work if we use indices; thats why we need to use getValue instead
+            //todo: fix this goddamn default value map because it doesn't actually set a value at the missing key when it returns a default value
+            val args = shaderComponent.shaderParams.getValue(GLType.VEC3).getValue("outlineColor")
+            args.set(0 until 3, 1.0f, 0f, 0f)
         }
 
         if (playerInteracted) {

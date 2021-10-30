@@ -54,7 +54,7 @@ class GameScreen(private val ecsWorld: EcsWorld, private val physicsWorld: Physi
         //test interactable entity
         val interactionEntity = ecsWorld.create()
         val texture = Texture("smug-pepe-transparent.png")
-        ecsWorld.edit(interactionEntity).add(TransformComponent().apply { size.set(50f, 50f, 0f) }).add(TextureComponent().apply { this.texture = texture }).add(InteractableComponent().apply { interactableType = InteractableComponent.InteractableObjectType.PICKUP })
+        ecsWorld.edit(interactionEntity).add(TransformComponent().apply { size.set(50f, 50f, 0f) }).add(TextureComponent().apply { this.texture = texture }).add(InteractableComponent().apply { interactableType = InteractableComponent.InteractableObjectType.PICKUP }).add(ShaderComponent())
 
         Gdx.input.inputProcessor = InputMultiplexer(KeyboardHandler(ecsWorld.getEntity(playerEntity), eventSystem))
     }
