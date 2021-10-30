@@ -6,6 +6,7 @@ import com.artemis.Entity
 import com.artemis.annotations.All
 import com.artemis.annotations.Wire
 import com.rpgproject.ecs.components.InteractableComponent
+import com.rpgproject.ecs.components.ShaderComponent
 import com.rpgproject.ecs.components.TextureComponent
 import com.rpgproject.ecs.components.TransformComponent
 import com.rpgproject.ecs.events.specific.PlayerInputEvent
@@ -20,16 +21,24 @@ class InteractionSystem : BaseEntitySystem() {
     var transformMapper: ComponentMapper<TransformComponent>? = null
 
     @Wire
+    var interactionMapper: ComponentMapper<InteractableComponent>? = null
+
+    @Wire
     var textureMapper: ComponentMapper<TextureComponent>? = null
+
+    @Wire
+    var shaderMapper: ComponentMapper<ShaderComponent>? = null
 
     //note: try to inject player entity into this clusterfuck somehow
     //same with shaders/colors
     private var playerEntity: Entity? = null
     private val interactionRange: Float = 150f //filter out only the entities whose distances are less than this, then select minimum distance one
 
-    @Subscribe
-    fun handleInteraction(e: PlayerInputEvent) {
+    private var playerInteracted = false
 
+    @Subscribe
+    fun interact(e: PlayerInputEvent) {
+        playerInteracted = e.interaction
     }
 
     override fun processSystem() {
@@ -47,8 +56,8 @@ class InteractionSystem : BaseEntitySystem() {
             val center = interactableTransform.center()
             val distance = distance(playerCenter.x, center.x, playerCenter.y, center.y)
             if (distance > interactionRange) {
-                val farTextureComponent = textureMapper!!.get(subscription.entities[i])
-                farTextureComponent?.shader = null
+                val farShaderComponent = shaderMapper!!.get(subscription.entities[i])
+                farShaderComponent?.shader = null
                 continue
             }
             if (distance < smallestDistance) {
@@ -56,10 +65,22 @@ class InteractionSystem : BaseEntitySystem() {
                 closestEntityId = subscription.entities[i]
             }
         }
-        println(smallestDistance)
         if (closestEntityId == playerEntity?.id) return
-        val textureComponent = textureMapper!!.get(closestEntityId)
-        textureComponent?.shader = ShaderStorage["Outline"].apply { setUniformf("outlineColor", 1f, 0f, 0f) } //todo: set actual injected outline shader here
+        val shaderComponent = shaderMapper!!.get(closestEntityId)
+        if (shaderComponent != null) {
+            val outlineShader = ShaderStorage["Outline"]
+            shaderComponent.shader = outlineShader
+            //todo: set shader params here
+        }
+
+        if (playerInteracted) {
+            playerInteracted = false
+
+            val interactableComponent = interactionMapper!!.get(closestEntityId)
+            when (interactableComponent.interactableType) {
+                InteractableComponent.InteractableObjectType.PICKUP -> println("picking up!")
+            }
+        }
     }
 
     fun injectPlayerEntity(e: Entity) {

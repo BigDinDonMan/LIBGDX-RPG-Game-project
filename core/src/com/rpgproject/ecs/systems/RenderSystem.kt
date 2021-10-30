@@ -7,6 +7,7 @@ import com.artemis.annotations.Wire
 import com.artemis.systems.IteratingSystem
 import com.badlogic.gdx.graphics.Camera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.rpgproject.ecs.components.ShaderComponent
 import com.rpgproject.ecs.components.TextureComponent
 import com.rpgproject.ecs.components.TransformComponent
 
@@ -18,6 +19,9 @@ class RenderSystem(private val spriteBatch: SpriteBatch, private val camera: Cam
 
     @Wire
     var textureMapper: ComponentMapper<TextureComponent>? = null
+
+    @Wire
+    var shaderMapper: ComponentMapper<ShaderComponent>? = null
 
     @SkipWire
     private var entityComparator: Comparator<Int> = Comparator { o1, o2 ->
@@ -34,13 +38,21 @@ class RenderSystem(private val spriteBatch: SpriteBatch, private val camera: Cam
     override fun process(entityId: Int) {
         val transform = transformMapper?.get(entityId)
         val texture = textureMapper?.get(entityId)
+        val shaderComp = shaderMapper?.get(entityId)
         if (texture?.texture == null) return
         spriteBatch.color = texture.color
-        spriteBatch.shader = texture.shader
+        if (shaderComp != null) {
+            applyShaderParams(shaderComp)
+            spriteBatch.shader = shaderComp.shader
+        }
         spriteBatch.draw(texture.texture, transform!!.position.x, transform.position.y)
     }
 
     override fun end() {
         spriteBatch.end()
+    }
+
+    private fun applyShaderParams(shaderComponent: ShaderComponent) {
+
     }
 }

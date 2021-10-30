@@ -13,7 +13,13 @@ object ShaderStorage {
     }
 
     private fun loadShaders() {
-        shadersMap.put("Outline", ShaderProgram(Gdx.files.internal("shaders/outline-vertex.glsl"), Gdx.files.internal("shaders/outline-fragment.glsl")))
+        shadersMap.put(
+                "Outline",
+                ShaderProgram(
+                        Gdx.files.internal("shaders/outline-vertex.glsl"),
+                        Gdx.files.internal("shaders/outline-fragment.glsl")
+                )
+        )
     }
 
     operator fun get(shaderName: String): ShaderProgram = shadersMap.get(shaderName)

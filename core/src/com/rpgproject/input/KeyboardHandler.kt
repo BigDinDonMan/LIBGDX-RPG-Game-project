@@ -28,16 +28,18 @@ class KeyboardHandler(val playerEntity: Entity, val eventSystem: EventSystem) : 
     override fun keyUp(keycode: Int): Boolean {
         var attack = false
         var dodge = false
+        var interaction = false
 
         when (keycode) {
             Input.Keys.W -> y = if (Gdx.input.isKeyPressed(Input.Keys.S)) y else 0f
             Input.Keys.S -> y = if (Gdx.input.isKeyPressed(Input.Keys.W)) y else 0f
             Input.Keys.A -> x = if (Gdx.input.isKeyPressed(Input.Keys.D)) x else 0f
             Input.Keys.D -> x = if (Gdx.input.isKeyPressed(Input.Keys.A)) x else 0f
+            Input.Keys.E -> interaction = true
         }
 
         //on interaction: highlight only closest object and interact with it on button press
-        eventSystem.dispatch(PlayerInputEvent(playerEntity, x, y, dodge = false, attack = false, interaction = false))
+        eventSystem.dispatch(PlayerInputEvent(playerEntity, x, y, dodge = false, attack = false, interaction = interaction))
 
         return true
     }
