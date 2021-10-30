@@ -5,6 +5,7 @@ import com.artemis.ComponentMapper
 import com.artemis.Entity
 import com.artemis.annotations.All
 import com.artemis.annotations.Wire
+import com.badlogic.gdx.graphics.Color
 import com.rpgproject.ecs.components.InteractableComponent
 import com.rpgproject.ecs.components.ShaderComponent
 import com.rpgproject.ecs.components.TextureComponent
@@ -18,7 +19,6 @@ import net.mostlyoriginal.api.event.common.Subscribe
 
 @All(InteractableComponent::class, TransformComponent::class, TextureComponent::class)
 class InteractionSystem : BaseEntitySystem() {
-    //todo: add outline color map depending on interactable type (e.g. yellow for pickups, blue for npcs, etc.)
     @Wire
     var transformMapper: ComponentMapper<TransformComponent>? = null
 
@@ -31,12 +31,16 @@ class InteractionSystem : BaseEntitySystem() {
     @Wire
     var shaderMapper: ComponentMapper<ShaderComponent>? = null
 
-    //note: try to inject player entity into this clusterfuck somehow
-    //same with shaders/colors
+    private val interactablesColorMap = HashMap<InteractableComponent.InteractableObjectType, Color>()
+
     private var playerEntity: Entity? = null
-    private val interactionRange: Float = 150f //filter out only the entities whose distances are less than this, then select minimum distance one
+    private val interactionRange: Float = 25f //filter out only the entities whose distances are less than this, then select minimum distance one
 
     private var playerInteracted = false
+
+    init {
+        interactablesColorMap[InteractableComponent.InteractableObjectType.PICKUP] = Color.CHARTREUSE
+    }
 
     @Subscribe
     fun interact(e: PlayerInputEvent) {
@@ -69,17 +73,20 @@ class InteractionSystem : BaseEntitySystem() {
         }
         if (closestEntityId == playerEntity?.id) return
         val shaderComponent = shaderMapper!!.get(closestEntityId)
+        val interactableComponent = interactionMapper!!.get(closestEntityId)
         if (shaderComponent != null) {
-            val outlineShader = ShaderStorage["Outline"]
-            shaderComponent.shader = outlineShader
+            shaderComponent.shader = ShaderStorage["Outline"]
             val args = shaderComponent.shaderParams.getValue(GLType.VEC3).getValue("outlineColor")
-            args.set(0 until 3, 1.0f, 0f, 0f)
+            val color = interactablesColorMap.getValue(interactableComponent.interactableType)
+            args.set(0 until 3, color.r, color.g, color.b)
         }
 
         if (playerInteracted) {
             playerInteracted = false
 
-            val interactableComponent = interactionMapper!!.get(closestEntityId)
+            // if its a pickup - add it to inventory if possible
+            // if its an npc - show dialogue window
+            // if its a lever/button/something similar - run its associated action
             when (interactableComponent.interactableType) {
                 InteractableComponent.InteractableObjectType.PICKUP -> println("picking up!")
             }
