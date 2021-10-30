@@ -20,13 +20,9 @@ import net.mostlyoriginal.api.event.common.EventSystem
 class GameScreen(private val ecsWorld: EcsWorld, private val physicsWorld: PhysicsWorld, private val eventSystem: EventSystem, private val camera: Camera) : KtxScreen {
 
     private val viewport = StretchViewport(Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat(), camera)
-//    private val testTexture = Texture(Gdx.files.internal("shaders/outline-test-texture.png"))
-//    private val spriteBatch = SpriteBatch()
-//    private val outlineShader = ShaderProgram(Gdx.files.internal("shaders/outline-vertex.glsl"), Gdx.files.internal("shaders/outline-fragment.glsl"))
 
     init {
         spawnTestEntities()
-//        spriteBatch.shader = outlineShader;
     }
 
     private fun spawnTestEntities() {
@@ -64,10 +60,6 @@ class GameScreen(private val ecsWorld: EcsWorld, private val physicsWorld: Physi
 
     override fun render(delta: Float) {
         ecsWorld.setDelta(delta).apply { ecsWorld.process() }
-//        spriteBatch.begin()
-//        outlineShader.setUniformf("outlineColor", 1f, 0f, 0f)
-//        spriteBatch.draw(testTexture, 50f, 50f)
-//        spriteBatch.end()
     }
 
     override fun resize(width: Int, height: Int) = viewport.update(width, height)
