@@ -3,13 +3,13 @@ package com.rpgproject.screens
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.InputMultiplexer
 import com.badlogic.gdx.graphics.Camera
+import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.physics.box2d.BodyDef
 import com.badlogic.gdx.physics.box2d.FixtureDef
 import com.badlogic.gdx.physics.box2d.PolygonShape
 import com.badlogic.gdx.utils.viewport.StretchViewport
-import com.rpgproject.ecs.components.PlayerComponent
-import com.rpgproject.ecs.components.RigidBodyComponent
-import com.rpgproject.ecs.components.TransformComponent
+import com.rpgproject.ecs.components.*
+import com.rpgproject.ecs.systems.InteractionSystem
 import com.rpgproject.input.KeyboardHandler
 import com.rpgproject.util.EcsWorld
 import com.rpgproject.util.PhysicsWorld
@@ -31,6 +31,7 @@ class GameScreen(private val ecsWorld: EcsWorld, private val physicsWorld: Physi
 
     private fun spawnTestEntities() {
         val playerEntity = ecsWorld.create()
+        ecsWorld.getSystem(InteractionSystem::class.java).injectPlayerEntity(ecsWorld.getEntity(playerEntity))
         val transform = TransformComponent()
         ecsWorld.edit(playerEntity).add(transform.apply {
             size.set(50f, 50f, 0f)
@@ -49,6 +50,11 @@ class GameScreen(private val ecsWorld: EcsWorld, private val physicsWorld: Physi
             physicsBody = body.apply { createFixture(fixtureDef) }
             shape.dispose()
         }).add(PlayerComponent())
+
+        //test interactable entity
+        val interactionEntity = ecsWorld.create()
+        val texture = Texture("smug-pepe-transparent.png")
+        ecsWorld.edit(interactionEntity).add(TransformComponent().apply { size.set(50f, 50f, 0f) }).add(TextureComponent().apply { this.texture = texture }).add(InteractableComponent().apply { interactableType = InteractableComponent.InteractableObjectType.PICKUP })
 
         Gdx.input.inputProcessor = InputMultiplexer(KeyboardHandler(ecsWorld.getEntity(playerEntity), eventSystem))
     }

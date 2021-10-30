@@ -16,6 +16,7 @@ import com.rpgproject.screens.GameScreen
 import com.rpgproject.screens.MainMenuScreen
 import com.rpgproject.util.EcsWorld
 import com.rpgproject.util.PhysicsWorld
+import com.rpgproject.util.assets.ShaderStorage
 import com.rpgproject.util.physics.CollisionListener
 import ktx.app.KtxGame
 import ktx.app.clearScreen
@@ -53,7 +54,7 @@ class RPGProjectGame : KtxGame<Screen>() {
     }
 
     override fun render() {
-        clearScreen(0f, 0f, 0f)
+        clearScreen(1f, 1f, 1f)
         mainCamera.update()
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
             Gdx.app.exit()
@@ -72,6 +73,7 @@ class RPGProjectGame : KtxGame<Screen>() {
         ecsWorld.dispose()
         physicsWorld.dispose()
         assetManager.dispose()
+        ShaderStorage.dispose()
     }
 
     private fun initArtemis() {
@@ -82,6 +84,7 @@ class RPGProjectGame : KtxGame<Screen>() {
                         CameraMovementSystem(mainCamera, 0.6f),
                         PhysicsSystem(physicsWorld, 6, 2),
                         PhysicsDebugSystem(physicsWorld, mainCamera),
+                        InteractionSystem(),
                         RenderSystem(batch, mainCamera),
                         CollisionHandlingSystem())
                 .build()
