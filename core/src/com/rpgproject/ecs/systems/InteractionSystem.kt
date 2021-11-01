@@ -88,7 +88,10 @@ class InteractionSystem : BaseEntitySystem() {
             // if its an npc - show dialogue window
             // if its a lever/button/something similar - run its associated action
             when (interactableComponent.interactableType) {
-                InteractableComponent.InteractableObjectType.PICKUP -> println("picking up!")
+                InteractableComponent.InteractableObjectType.PICKUP -> {
+                    println("picking up!")
+//                    Inventory.onItemAdded?.invoke(closestEntityId)
+                }
             }
         }
     }

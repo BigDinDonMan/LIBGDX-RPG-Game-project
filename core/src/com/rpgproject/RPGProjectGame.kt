@@ -60,11 +60,6 @@ class RPGProjectGame : KtxGame<Screen>() {
             Gdx.app.exit()
             exitProcess(0)
         }
-//        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-//            println("henlo")
-//            val e = ecsWorld.createEntity()
-//            ecsWorld.edit(e.id).add(TransformComponent()).add(TextureComponent().apply { texture=assetManager.get("Jester.png", Texture::class.java) })
-//        }
         currentScreen.render(Gdx.graphics.deltaTime)
     }
 

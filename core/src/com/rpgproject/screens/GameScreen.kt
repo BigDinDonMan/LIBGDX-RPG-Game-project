@@ -1,16 +1,21 @@
 package com.rpgproject.screens
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Input
 import com.badlogic.gdx.InputMultiplexer
 import com.badlogic.gdx.graphics.Camera
-import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.physics.box2d.BodyDef
 import com.badlogic.gdx.physics.box2d.FixtureDef
 import com.badlogic.gdx.physics.box2d.PolygonShape
+import com.badlogic.gdx.scenes.scene2d.Stage
+import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.utils.viewport.StretchViewport
-import com.rpgproject.ecs.components.*
+import com.rpgproject.ecs.components.PlayerComponent
+import com.rpgproject.ecs.components.RigidBodyComponent
+import com.rpgproject.ecs.components.TransformComponent
 import com.rpgproject.ecs.systems.InteractionSystem
 import com.rpgproject.input.KeyboardHandler
+import com.rpgproject.ui.InventoryWindow
 import com.rpgproject.util.EcsWorld
 import com.rpgproject.util.PhysicsWorld
 import ktx.app.KtxScreen
@@ -20,8 +25,11 @@ import net.mostlyoriginal.api.event.common.EventSystem
 class GameScreen(private val ecsWorld: EcsWorld, private val physicsWorld: PhysicsWorld, private val eventSystem: EventSystem, private val camera: Camera) : KtxScreen {
 
     private val viewport = StretchViewport(Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat(), camera)
+    private val stage = Stage(viewport)
+    private val inventoryWindow = InventoryWindow("Inventory", Skin(Gdx.files.internal("skins/uiskin.json")))
 
     init {
+        setupUI()
         spawnTestEntities()
     }
 
@@ -47,20 +55,29 @@ class GameScreen(private val ecsWorld: EcsWorld, private val physicsWorld: Physi
             shape.dispose()
         }).add(PlayerComponent())
 
-        //test interactable entity
-        val interactionEntity = ecsWorld.create()
-        val texture = Texture("smug-pepe-transparent.png")
-        ecsWorld.edit(interactionEntity).add(TransformComponent().apply { size.set(50f, 50f, 0f) }).add(TextureComponent().apply { this.texture = texture }).add(InteractableComponent().apply { interactableType = InteractableComponent.InteractableObjectType.PICKUP }).add(ShaderComponent())
-
-        Gdx.input.inputProcessor = InputMultiplexer(KeyboardHandler(ecsWorld.getEntity(playerEntity), eventSystem))
+        Gdx.input.inputProcessor = InputMultiplexer(KeyboardHandler(ecsWorld.getEntity(playerEntity), eventSystem), stage)
     }
 
     override fun dispose() {
+        stage.dispose()
     }
 
     override fun render(delta: Float) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.I)) {
+            inventoryWindow.isVisible = !inventoryWindow.isVisible
+        }
+        stage.act(delta)
+        stage.draw()
         ecsWorld.setDelta(delta).apply { ecsWorld.process() }
     }
 
     override fun resize(width: Int, height: Int) = viewport.update(width, height)
+
+    fun setupUI() {
+        stage.addActor(inventoryWindow)
+        inventoryWindow.setPosition(
+                Gdx.graphics.width.toFloat() / 2 - inventoryWindow.width / 2,
+                Gdx.graphics.height.toFloat() / 2 - inventoryWindow.height / 2)
+        inventoryWindow.isVisible = false
+    }
 }

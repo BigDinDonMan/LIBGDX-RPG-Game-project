@@ -1,13 +1,15 @@
 package com.rpgproject.inventory
 
+import com.artemis.Entity
+
 object Inventory {
-    private val items = Array<InventoryItem?>(24) { null }
+    val items = Array<InventoryItem?>(24) { null }
     var currency = 0
 
     //<editor-fold desc="Inventory callbacks">
 
     val onArtifactEquipped: Any? = null //this is going to be a callback once implemented
-    val onItemAdded: Any? = null
+    val onItemAdded: ((Entity) -> Unit)? = null
 
     //</editor-fold>
 
