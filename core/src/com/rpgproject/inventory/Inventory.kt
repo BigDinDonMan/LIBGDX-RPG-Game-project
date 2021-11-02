@@ -1,6 +1,6 @@
 package com.rpgproject.inventory
 
-import com.artemis.Entity
+import com.rpgproject.util.observer.DoubleArgGameEvent
 
 object Inventory {
     val items = Array<InventoryItem?>(24) { null }
@@ -9,7 +9,8 @@ object Inventory {
     //<editor-fold desc="Inventory callbacks">
 
     val onArtifactEquipped: Any? = null //this is going to be a callback once implemented
-    val onItemAdded: ((Entity) -> Unit)? = null
+    val onItemAdded = DoubleArgGameEvent<InventoryItem, Int>() //item and its position in inventory
+    val onItemRemoved = DoubleArgGameEvent<InventoryItem, Int>() //ditto
 
     //</editor-fold>
 

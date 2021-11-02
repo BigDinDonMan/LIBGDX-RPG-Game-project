@@ -97,10 +97,11 @@ class InteractionSystem : BaseEntitySystem() {
                     val itemComp = inventoryItemMapper!!.get(closestEntityId)
                     if (itemComp != null && itemTextureComp?.texture != null) {
                         val item = InventoryItem(itemComp.name, itemComp.description, itemTextureComp.texture!!)
-                        Inventory.addItem(item)
+                        if (Inventory.addItem(item)) {
+                            //remove entity from the game
+                            world.delete(closestEntityId)
+                        }
                     }
-                    //create an InventoryItem object instance and add it to inventory
-//                    val success = Inventory.addItem()
                 }
             }
         }
