@@ -27,6 +27,6 @@ class InventoryWindow : Window {
     }
 
     private fun setUpInventoryListeners() {
-
+        //todo: setup onItemAdded and onItemRemoved and subscribe to them here, to make them update the UI when new items are added or removed
     }
 }

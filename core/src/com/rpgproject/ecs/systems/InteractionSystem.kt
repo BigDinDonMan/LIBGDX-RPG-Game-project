@@ -6,11 +6,10 @@ import com.artemis.Entity
 import com.artemis.annotations.All
 import com.artemis.annotations.Wire
 import com.badlogic.gdx.graphics.Color
-import com.rpgproject.ecs.components.InteractableComponent
-import com.rpgproject.ecs.components.ShaderComponent
-import com.rpgproject.ecs.components.TextureComponent
-import com.rpgproject.ecs.components.TransformComponent
+import com.rpgproject.ecs.components.*
 import com.rpgproject.ecs.events.specific.PlayerInputEvent
+import com.rpgproject.inventory.Inventory
+import com.rpgproject.inventory.InventoryItem
 import com.rpgproject.util.GLType
 import com.rpgproject.util.assets.ShaderStorage
 import com.rpgproject.util.collections.set
@@ -27,6 +26,9 @@ class InteractionSystem : BaseEntitySystem() {
 
     @Wire
     var textureMapper: ComponentMapper<TextureComponent>? = null
+
+    @Wire
+    var inventoryItemMapper: ComponentMapper<InventoryItemComponent>? = null
 
     @Wire
     var shaderMapper: ComponentMapper<ShaderComponent>? = null
@@ -88,8 +90,15 @@ class InteractionSystem : BaseEntitySystem() {
             // if its an npc - show dialogue window
             // if its a lever/button/something similar - run its associated action
             when (interactableComponent.interactableType) {
+                //note: if its a pickup then it has to have inventory item component and texture component instances
                 InteractableComponent.InteractableObjectType.PICKUP -> {
                     println("picking up!")
+                    val itemTextureComp = textureMapper!!.get(closestEntityId)
+                    val itemComp = inventoryItemMapper!!.get(closestEntityId)
+                    if (itemComp != null && itemTextureComp?.texture != null) {
+                        val item = InventoryItem(itemComp.name, itemComp.description, itemTextureComp.texture!!)
+                        Inventory.addItem(item)
+                    }
                     //create an InventoryItem object instance and add it to inventory
 //                    val success = Inventory.addItem()
                 }

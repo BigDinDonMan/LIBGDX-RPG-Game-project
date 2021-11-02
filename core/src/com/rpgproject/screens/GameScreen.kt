@@ -18,13 +18,15 @@ import com.rpgproject.input.KeyboardHandler
 import com.rpgproject.ui.InventoryWindow
 import com.rpgproject.util.EcsWorld
 import com.rpgproject.util.PhysicsWorld
+import com.rpgproject.util.heightF
+import com.rpgproject.util.ui.update
+import com.rpgproject.util.widthF
 import ktx.app.KtxScreen
 import net.mostlyoriginal.api.event.common.EventSystem
 
-// same here, add camera & viewport to handle resizing
 class GameScreen(private val ecsWorld: EcsWorld, private val physicsWorld: PhysicsWorld, private val eventSystem: EventSystem, private val camera: Camera) : KtxScreen {
 
-    private val viewport = StretchViewport(Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat(), camera)
+    private val viewport = StretchViewport(Gdx.graphics.widthF(), Gdx.graphics.heightF(), camera)
     private val stage = Stage(viewport)
     private val inventoryWindow = InventoryWindow("Inventory", Skin(Gdx.files.internal("skins/uiskin.json")))
 
@@ -66,18 +68,17 @@ class GameScreen(private val ecsWorld: EcsWorld, private val physicsWorld: Physi
         if (Gdx.input.isKeyJustPressed(Input.Keys.I)) {
             inventoryWindow.isVisible = !inventoryWindow.isVisible
         }
-        stage.act(delta)
-        stage.draw()
+        stage.update(delta)
         ecsWorld.setDelta(delta).apply { ecsWorld.process() }
     }
 
     override fun resize(width: Int, height: Int) = viewport.update(width, height)
 
-    fun setupUI() {
+    private fun setupUI() {
         stage.addActor(inventoryWindow)
         inventoryWindow.setPosition(
-                Gdx.graphics.width.toFloat() / 2 - inventoryWindow.width / 2,
-                Gdx.graphics.height.toFloat() / 2 - inventoryWindow.height / 2)
+                Gdx.graphics.widthF() / 2 - inventoryWindow.width / 2,
+                Gdx.graphics.heightF() / 2 - inventoryWindow.height / 2)
         inventoryWindow.isVisible = false
     }
 }
