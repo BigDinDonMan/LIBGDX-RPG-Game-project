@@ -12,6 +12,8 @@ class LevellingSystem : BaseSystem() {
 
     var playerEntity: Entity? = null
 
+    val ATTR_POINTS_PER_LEVEL = 4
+
     @Wire
     var levelDataMapper: ComponentMapper<LevelDataComponent>? = null
 
@@ -19,5 +21,30 @@ class LevellingSystem : BaseSystem() {
 
     @Subscribe
     fun getExperienceData(e: ExperienceGainEvent) {
+        val levelDataComponent = levelDataMapper!!.get(playerEntity)
+        addExperience(levelDataComponent, e)
+        addKillStatistic(e)
+    }
+
+    private fun addExperience(levelData: LevelDataComponent, e: ExperienceGainEvent) {
+        levelData.currentExperience += e.experience
+        if (levelData.currentExperience >= levelData.experienceToLevel) {
+            levelUp(levelData)
+        }
+        //todo: add onExperienceGained event to display changes in the UI
+    }
+
+    private fun levelUp(levelData: LevelDataComponent) {
+        levelData.currentExperience = (levelData.currentExperience % levelData.experienceToLevel)
+        levelData.currentLevel++
+        levelData.skillPoints++
+        levelData.attributePoints += ATTR_POINTS_PER_LEVEL
+    }
+
+    private fun addKillStatistic(e: ExperienceGainEvent) {
+    }
+
+    fun injectPlayerEntity(e: Entity) {
+        this.playerEntity = e
     }
 }

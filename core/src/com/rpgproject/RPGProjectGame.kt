@@ -17,6 +17,7 @@ import com.rpgproject.screens.MainMenuScreen
 import com.rpgproject.util.EcsWorld
 import com.rpgproject.util.PhysicsWorld
 import com.rpgproject.util.assets.ShaderStorage
+import com.rpgproject.util.ecs.RemovalService
 import com.rpgproject.util.physics.CollisionListener
 import ktx.app.KtxGame
 import ktx.app.clearScreen
@@ -47,6 +48,7 @@ class RPGProjectGame : KtxGame<Screen>() {
         initArtemis()
         physicsWorld.setContactListener(CollisionListener(eventBus))
 
+        RemovalService.init(ecsWorld, physicsWorld)
 
         addScreen(MainMenuScreen(mainCamera))
         addScreen(GameScreen(ecsWorld, physicsWorld, eventBus, mainCamera))

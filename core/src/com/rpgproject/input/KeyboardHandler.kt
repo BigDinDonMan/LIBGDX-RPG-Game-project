@@ -12,6 +12,8 @@ class KeyboardHandler(val playerEntity: Entity, val eventSystem: EventSystem) : 
     private var x = 0f
     private var y = 0f
 
+    private val INTERACTION_KEY = Input.Keys.E
+
     override fun keyDown(keycode: Int): Boolean {
         when (keycode) {
             Input.Keys.W -> y = 1f
@@ -35,7 +37,7 @@ class KeyboardHandler(val playerEntity: Entity, val eventSystem: EventSystem) : 
             Input.Keys.S -> y = if (Gdx.input.isKeyPressed(Input.Keys.W)) y else 0f
             Input.Keys.A -> x = if (Gdx.input.isKeyPressed(Input.Keys.D)) x else 0f
             Input.Keys.D -> x = if (Gdx.input.isKeyPressed(Input.Keys.A)) x else 0f
-            Input.Keys.E -> interaction = true
+            INTERACTION_KEY -> interaction = true
         }
 
         //on interaction: highlight only closest object and interact with it on button press
