@@ -18,6 +18,7 @@ import com.rpgproject.input.KeyboardHandler
 import com.rpgproject.ui.InventoryWindow
 import com.rpgproject.util.EcsWorld
 import com.rpgproject.util.PhysicsWorld
+import com.rpgproject.util.ecs.RemovalService
 import com.rpgproject.util.heightF
 import com.rpgproject.util.ui.update
 import com.rpgproject.util.widthF
@@ -70,6 +71,7 @@ class GameScreen(private val ecsWorld: EcsWorld, private val physicsWorld: Physi
         }
         stage.update(delta)
         ecsWorld.setDelta(delta).apply { ecsWorld.process() }
+        RemovalService.process()
     }
 
     override fun resize(width: Int, height: Int) = viewport.update(width, height)
