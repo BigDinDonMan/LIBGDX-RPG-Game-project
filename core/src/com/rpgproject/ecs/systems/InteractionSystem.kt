@@ -90,7 +90,8 @@ class InteractionSystem : BaseEntitySystem() {
             when (interactableComponent.interactableType) {
                 InteractableComponent.InteractableObjectType.PICKUP -> {
                     println("picking up!")
-//                    Inventory.onItemAdded?.invoke(closestEntityId)
+                    //create an InventoryItem object instance and add it to inventory
+//                    val success = Inventory.addItem()
                 }
             }
         }

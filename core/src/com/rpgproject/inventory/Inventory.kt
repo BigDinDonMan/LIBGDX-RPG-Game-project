@@ -14,8 +14,10 @@ object Inventory {
     //</editor-fold>
 
     //<editor-fold desc="Item add & remove logic">
+    //todo: invoke onItemAdded here
     fun addItem(item: InventoryItem) = itemAssignInternal(null, item)
 
+    //todo: add onItemRemoved and invoke it here
     fun removeItem(item: InventoryItem) = itemAssignInternal(item, null)
 
     fun itemAt(position: Int) = items[position]

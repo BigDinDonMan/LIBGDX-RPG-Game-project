@@ -17,8 +17,12 @@ class InventoryWindow : Window {
 
     private fun initUI() {
         val slotsPerRow = 6 //might be subject to change
-        for (i in 0 until Inventory.items.size) {
-            addActor(InventorySlot())
+        val rows = Inventory.items.size / slotsPerRow
+        for (i in 0 until rows) {
+            row()
+            for (j in 0 until slotsPerRow) {
+                addActor(InventorySlot())
+            }
         }
     }
 
