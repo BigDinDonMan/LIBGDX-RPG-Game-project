@@ -38,10 +38,11 @@ class KeyboardHandler(val playerEntity: Entity, val eventSystem: EventSystem) : 
             Input.Keys.A -> x = if (Gdx.input.isKeyPressed(Input.Keys.D)) x else 0f
             Input.Keys.D -> x = if (Gdx.input.isKeyPressed(Input.Keys.A)) x else 0f
             INTERACTION_KEY -> interaction = true
+            Input.Keys.ENTER -> attack = true
         }
 
         //on interaction: highlight only closest object and interact with it on button press
-        eventSystem.dispatch(PlayerInputEvent(playerEntity, x, y, dodge = false, attack = false, interaction = interaction))
+        eventSystem.dispatch(PlayerInputEvent(playerEntity, x, y, dodge = dodge, attack = attack, interaction = interaction))
 
         return true
     }

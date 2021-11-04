@@ -8,7 +8,9 @@ import com.badlogic.gdx.math.Vector2
 import com.rpgproject.ecs.components.PlayerComponent
 import com.rpgproject.ecs.components.RigidBodyComponent
 import com.rpgproject.ecs.components.TransformComponent
+import com.rpgproject.ecs.events.specific.CameraShakeEvent
 import com.rpgproject.ecs.events.specific.PlayerInputEvent
+import net.mostlyoriginal.api.event.common.EventSystem
 import net.mostlyoriginal.api.event.common.Subscribe
 
 @All(PlayerComponent::class)
@@ -22,6 +24,9 @@ class PlayerInputSystem : IteratingSystem() {
 
     @Wire
     var playerMapper: ComponentMapper<PlayerComponent>? = null
+
+    @Wire
+    var eventSystem: EventSystem? = null
 
     var playerMoveDirection = Vector2()
 
@@ -49,6 +54,7 @@ class PlayerInputSystem : IteratingSystem() {
             dodge = false
         }
         if (attack) {
+            eventSystem?.dispatch(CameraShakeEvent(true))
             attack = false
         }
     }
