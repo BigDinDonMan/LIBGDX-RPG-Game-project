@@ -78,7 +78,7 @@ class RPGProjectGame : KtxGame<Screen>() {
         val config = WorldConfigurationBuilder()
                 .with(
                         PlayerInputSystem(),
-                        CameraMovementSystem(mainCamera, 0.6f),
+                        CameraMovementSystem(mainCamera, 0.3f),
                         PhysicsSystem(physicsWorld, 6, 2),
                         PhysicsDebugSystem(physicsWorld, mainCamera),
                         InteractionSystem(),

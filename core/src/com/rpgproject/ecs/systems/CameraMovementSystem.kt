@@ -5,7 +5,8 @@ import com.artemis.annotations.One
 import com.artemis.annotations.Wire
 import com.artemis.systems.IteratingSystem
 import com.badlogic.gdx.graphics.Camera
-import com.badlogic.gdx.math.MathUtils
+import com.badlogic.gdx.math.Interpolation
+import com.badlogic.gdx.math.Vector3
 import com.rpgproject.ecs.components.PlayerComponent
 import com.rpgproject.ecs.components.RigidBodyComponent
 import com.rpgproject.ecs.components.TransformComponent
@@ -19,17 +20,22 @@ class CameraMovementSystem(val camera: Camera, val cameraSpeed: Float = 0.5f) : 
     @Wire
     var rigidBodyMapper: ComponentMapper<RigidBodyComponent>? = null
 
+    private var isShaking = false
+    private var shakeMagnitude = 0.1f
+    private var cameraPosition = Vector3()
+    private var targetPosition = Vector3()
+
+    override fun begin() {
+        cameraPosition.set(camera.position)
+    }
+
     override fun process(entityId: Int) {
+        val transform = transformMapper!!.get(entityId)
         val rigidBody = rigidBodyMapper!!.get(entityId)
-        val cameraX = camera.position.x
-        val cameraY = camera.position.y
         val playerX = rigidBody.physicsBody!!.position.x
         val playerY = rigidBody.physicsBody!!.position.y
-
-        camera.position.set(
-                MathUtils.lerp(cameraX, playerX, cameraSpeed),
-                MathUtils.lerp(cameraY, playerY, cameraSpeed),
-                camera.position.z
-        )
+        targetPosition.set(playerX, playerY, transform.position.z)
+        cameraPosition.interpolate(targetPosition, cameraSpeed, Interpolation.smooth2)
+        camera.position.set(cameraPosition)
     }
 }

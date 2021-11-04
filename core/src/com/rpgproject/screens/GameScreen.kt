@@ -66,9 +66,7 @@ class GameScreen(private val ecsWorld: EcsWorld, private val physicsWorld: Physi
     }
 
     override fun render(delta: Float) {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.I)) {
-            inventoryWindow.isVisible = !inventoryWindow.isVisible
-        }
+        pollInputForUI() //todo: maybe extract it to separate input handler and add it to input multiplexer & send events through event system?
         stage.update(delta)
         ecsWorld.setDelta(delta).apply { ecsWorld.process() }
         RemovalService.process()
@@ -77,11 +75,19 @@ class GameScreen(private val ecsWorld: EcsWorld, private val physicsWorld: Physi
     override fun resize(width: Int, height: Int) = viewport.update(width, height)
 
     private fun setupUI() {
+        val screenWidth = Gdx.graphics.widthF()
+        val screenHeight = Gdx.graphics.heightF()
         stage.addActor(inventoryWindow)
-        inventoryWindow.setSize(Gdx.graphics.widthF() - 250f, Gdx.graphics.heightF() - 200f)
+        inventoryWindow.setSize(screenWidth - 250f, screenHeight - 200f)
         inventoryWindow.setPosition(
                 Gdx.graphics.widthF() / 2 - inventoryWindow.width / 2,
                 Gdx.graphics.heightF() / 2 - inventoryWindow.height / 2)
         inventoryWindow.isVisible = false
+    }
+
+    private fun pollInputForUI() {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.I)) {
+            inventoryWindow.isVisible = !inventoryWindow.isVisible
+        }
     }
 }
