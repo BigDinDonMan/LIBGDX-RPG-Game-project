@@ -12,6 +12,7 @@ import com.rpgproject.ecs.events.specific.CameraShakeEvent
 import com.rpgproject.ecs.events.specific.PlayerInputEvent
 import net.mostlyoriginal.api.event.common.EventSystem
 import net.mostlyoriginal.api.event.common.Subscribe
+import kotlin.random.Random
 
 @All(PlayerComponent::class)
 class PlayerInputSystem : IteratingSystem() {
@@ -54,7 +55,7 @@ class PlayerInputSystem : IteratingSystem() {
             dodge = false
         }
         if (attack) {
-            eventSystem?.dispatch(CameraShakeEvent(true))
+            eventSystem?.dispatch(CameraShakeEvent(2f, Random.nextFloat() * 5f))
             attack = false
         }
     }

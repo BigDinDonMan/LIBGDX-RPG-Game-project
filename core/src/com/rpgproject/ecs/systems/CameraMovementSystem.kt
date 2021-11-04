@@ -34,7 +34,10 @@ class CameraMovementSystem(val camera: Camera, val cameraSpeed: Float = 0.5f) : 
 
     @Subscribe
     fun startShaking(e: CameraShakeEvent) {
-        isShaking = e.shaking
+        isShaking = true
+        maxShakeMagnitude = e.magnitude
+        shakeDuration = e.duration
+        currentShakeDuration = 0f
         interpolationPosition.set(cameraPosition)
     }
 
