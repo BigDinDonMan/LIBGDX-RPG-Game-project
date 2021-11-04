@@ -78,6 +78,7 @@ class GameScreen(private val ecsWorld: EcsWorld, private val physicsWorld: Physi
 
     private fun setupUI() {
         stage.addActor(inventoryWindow)
+        inventoryWindow.setSize(Gdx.graphics.widthF() - 250f, Gdx.graphics.heightF() - 200f)
         inventoryWindow.setPosition(
                 Gdx.graphics.widthF() / 2 - inventoryWindow.width / 2,
                 Gdx.graphics.heightF() / 2 - inventoryWindow.height / 2)
