@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.Box2D
 import com.rpgproject.ecs.systems.*
+import com.rpgproject.input.GamePadHandler
 import com.rpgproject.screens.GameScreen
 import com.rpgproject.screens.MainMenuScreen
 import com.rpgproject.util.EcsWorld
@@ -33,6 +34,7 @@ class RPGProjectGame : KtxGame<Screen>() {
     private lateinit var serializationManager: WorldSerializationManager
     private lateinit var assetManager: AssetManager
     private lateinit var eventBus: EventSystem
+    private lateinit var gamePadHandler: GamePadHandler
 
     companion object {
         lateinit var Instance: RPGProjectGame
@@ -47,12 +49,13 @@ class RPGProjectGame : KtxGame<Screen>() {
         physicsWorld = PhysicsWorld(Vector2(0f, -10f), false)
         initArtemis()
         physicsWorld.setContactListener(CollisionListener(eventBus))
+        gamePadHandler = GamePadHandler(eventBus)
 
         RemovalService.init(ecsWorld, physicsWorld)
 
         addScreen(MainMenuScreen(mainCamera))
         addScreen(GameScreen(ecsWorld, physicsWorld, eventBus, mainCamera))
-        setScreen<GameScreen>()
+        setScreen<GameScreen>() //temporarily, for testing purposes
     }
 
     override fun render() {

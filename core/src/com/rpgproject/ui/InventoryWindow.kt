@@ -21,7 +21,8 @@ class InventoryWindow : Window {
         for (i in 0 until rows) {
             row()
             for (j in 0 until slotsPerRow) {
-                addActor(InventorySlot())
+                //todo: make inventory slot either inherit from ImageButton or be composed of ImageButton (preferably second option)
+                addActor(InventorySlot(null))
             }
         }
     }
