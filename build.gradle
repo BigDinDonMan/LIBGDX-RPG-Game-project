@@ -27,6 +27,7 @@ allprojects {
         gdxControllersVersion = '2.2.0'
         ktxVersion = '1.10.0-b1'
         artemisVersion = '2.3.0'
+        cuversion = '2.3.0'
     }
 
     repositories {
@@ -63,6 +64,7 @@ project(":desktop") {
         compile "net.onedaybeard.artemis:artemis-odb:$artemisVersion"
         compile "net.onedaybeard.artemis:artemis-odb-serializer-json-libgdx:$artemisVersion"
         compile "net.mostlyoriginal.artemis-odb:contrib-eventbus:$artemisVersion"
+        compile "de.golfgl.gdxcontrollerutils:gdx-controllerutils-scene2d:$cuversion"
     }
 }
 
@@ -89,5 +91,6 @@ project(":core") {
         compile "net.onedaybeard.artemis:artemis-odb:$artemisVersion"
         compile "net.onedaybeard.artemis:artemis-odb-serializer-json-libgdx:$artemisVersion"
         compile "net.mostlyoriginal.artemis-odb:contrib-eventbus:$artemisVersion"
+        compile "de.golfgl.gdxcontrollerutils:gdx-controllerutils-scene2d:$cuversion"
     }
 }

@@ -3,9 +3,13 @@ package com.rpgproject.input
 import com.badlogic.gdx.controllers.Controller
 import com.badlogic.gdx.controllers.ControllerAdapter
 import com.badlogic.gdx.controllers.Controllers
+import com.rpgproject.util.input.ControllerMappings
 import net.mostlyoriginal.api.event.common.EventSystem
 
 class GamePadHandler(val eventSystem: EventSystem) : ControllerAdapter() {
+
+    private var xAxisInput = 0f
+    private var yAxisInput = 0f
 
     private var currentController: Controller? = null
 
@@ -37,7 +41,15 @@ class GamePadHandler(val eventSystem: EventSystem) : ControllerAdapter() {
     }
 
     override fun axisMoved(controller: Controller?, axisIndex: Int, value: Float): Boolean {
-        println("${axisIndex}, $value")
-        return super.axisMoved(controller, axisIndex, value)
+//        val currentX = 0f
+//        val currentY = 0f
+//        return if (axisIndex == ControllerMappings.X_AXIS) {
+//            xAxisInput = value
+//            true;
+//        } else if (axisIndex == ControllerMappings.Y_AXIS) {
+//            yAxisInput = value
+//            true;
+//        } else false
+        return true
     }
 }
