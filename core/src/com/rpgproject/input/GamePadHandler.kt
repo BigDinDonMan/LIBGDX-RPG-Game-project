@@ -8,6 +8,8 @@ import com.rpgproject.ecs.events.specific.PlayerInputEvent
 import com.rpgproject.util.input.ControllerInputMappings
 import net.mostlyoriginal.api.event.common.EventSystem
 
+//todo: set this as an abstract class
+//handle Xbox360/XOne/Ps4 controllers separately
 class GamePadHandler(val eventSystem: EventSystem) : ControllerAdapter() {
 
     private var playerEntity: Entity? = null
@@ -31,12 +33,10 @@ class GamePadHandler(val eventSystem: EventSystem) : ControllerAdapter() {
 
     override fun connected(controller: Controller?) {
         setUpController(controller)
-        println("connected")
     }
 
     override fun disconnected(controller: Controller?) {
         currentController = null //just dont care which is disconnected because thats a single player game
-        println("disconnected")
     }
 
     override fun buttonDown(controller: Controller?, buttonIndex: Int): Boolean {
@@ -51,7 +51,7 @@ class GamePadHandler(val eventSystem: EventSystem) : ControllerAdapter() {
         if (axisIndex == ControllerInputMappings.Y_AXIS) {
             yAxisInput = -value //for some reason, y axis goes into negatives if you go upwards
         }
-        //tbh, I think its time to split this event into separate ones (move direction event, attack event, etc., or change it into keyboard and gamepad events)
+        //todo: tbh, I think its time to split this event into separate ones (move direction event, attack event, etc., or change it into keyboard and gamepad events)
         eventSystem.dispatch(PlayerInputEvent(playerEntity!!, xAxisInput, yAxisInput, false, false, false))
         return true
     }
