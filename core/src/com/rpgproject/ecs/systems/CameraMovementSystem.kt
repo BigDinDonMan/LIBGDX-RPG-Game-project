@@ -53,7 +53,8 @@ class CameraMovementSystem(val camera: Camera, val cameraSpeed: Float = 0.5f) : 
         val playerX = rigidBody.physicsBody!!.position.x
         val playerY = rigidBody.physicsBody!!.position.y
         targetPosition.set(playerX, playerY, transform.position.z)
-        if (isShaking) { //todo: add smoothing to shake magnitude (make it shake less if its close to stopping the shaking, e.g. using lerp)
+        //todo: check if constant for smoothing speed will be sufficient, if not - make smoothing speed dependent on maxShakeMagnitude
+        if (isShaking) { //todo: add smoothing to shake magnitude (make it shake less if its close to stopping the shaking, e.g. using lerp instead of randomizing the strength)
             interpolationPosition.interpolate(targetPosition, cameraSpeed, Interpolation.smooth2)
             cameraPosition.set(interpolationPosition)
             cameraPosition.add(
@@ -67,7 +68,7 @@ class CameraMovementSystem(val camera: Camera, val cameraSpeed: Float = 0.5f) : 
                 isShaking = false
             }
         } else {
-            cameraPosition.interpolate(targetPosition, cameraSpeed, Interpolation.smooth2)
+//            cameraPosition.interpolate(targetPosition, cameraSpeed, Interpolation.smooth2)
         }
         camera.position.set(cameraPosition)
     }

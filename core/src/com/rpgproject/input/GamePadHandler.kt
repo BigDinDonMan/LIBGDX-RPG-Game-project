@@ -1,12 +1,16 @@
 package com.rpgproject.input
 
+import com.artemis.Entity
 import com.badlogic.gdx.controllers.Controller
 import com.badlogic.gdx.controllers.ControllerAdapter
 import com.badlogic.gdx.controllers.Controllers
+import com.rpgproject.ecs.events.specific.PlayerInputEvent
 import com.rpgproject.util.input.ControllerInputMappings
 import net.mostlyoriginal.api.event.common.EventSystem
 
 class GamePadHandler(val eventSystem: EventSystem) : ControllerAdapter() {
+
+    private var playerEntity: Entity? = null
 
     private var xAxisInput = 0f
     private var yAxisInput = 0f
@@ -41,16 +45,18 @@ class GamePadHandler(val eventSystem: EventSystem) : ControllerAdapter() {
     }
 
     override fun axisMoved(controller: Controller?, axisIndex: Int, value: Float): Boolean {
-        var currentX = 0f
-        var currentY = 0f
         if (axisIndex == ControllerInputMappings.X_AXIS) {
-            currentX = value
-        } else if (axisIndex == ControllerInputMappings.Y_AXIS) {
-            currentY = value
+            xAxisInput = value
         }
-//        if () {
-//
-//        }
+        if (axisIndex == ControllerInputMappings.Y_AXIS) {
+            yAxisInput = -value //for some reason, y axis goes into negatives if you go upwards
+        }
+        //tbh, I think its time to split this event into separate ones (move direction event, attack event, etc., or change it into keyboard and gamepad events)
+        eventSystem.dispatch(PlayerInputEvent(playerEntity!!, xAxisInput, yAxisInput, false, false, false))
         return true
+    }
+
+    fun injectPlayerEntity(e: Entity) {
+        this.playerEntity = e
     }
 }

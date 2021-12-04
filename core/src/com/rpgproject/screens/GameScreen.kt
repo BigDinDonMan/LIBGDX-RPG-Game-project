@@ -7,13 +7,13 @@ import com.badlogic.gdx.graphics.Camera
 import com.badlogic.gdx.physics.box2d.BodyDef
 import com.badlogic.gdx.physics.box2d.FixtureDef
 import com.badlogic.gdx.physics.box2d.PolygonShape
-import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.utils.viewport.StretchViewport
 import com.rpgproject.ecs.components.PlayerComponent
 import com.rpgproject.ecs.components.RigidBodyComponent
 import com.rpgproject.ecs.components.TransformComponent
 import com.rpgproject.ecs.systems.InteractionSystem
+import com.rpgproject.input.GamePadHandler
 import com.rpgproject.input.KeyboardHandler
 import com.rpgproject.ui.InventoryWindow
 import com.rpgproject.util.EcsWorld
@@ -26,7 +26,7 @@ import de.golfgl.gdx.controllers.ControllerMenuStage
 import ktx.app.KtxScreen
 import net.mostlyoriginal.api.event.common.EventSystem
 
-class GameScreen(private val ecsWorld: EcsWorld, private val physicsWorld: PhysicsWorld, private val eventSystem: EventSystem, private val camera: Camera) : KtxScreen {
+class GameScreen(private val ecsWorld: EcsWorld, private val physicsWorld: PhysicsWorld, private val eventSystem: EventSystem, private val camera: Camera, private val gamePadHandler: GamePadHandler) : KtxScreen {
 
     private val viewport = StretchViewport(Gdx.graphics.widthF(), Gdx.graphics.heightF())
     private val stage = ControllerMenuStage(viewport)
@@ -60,6 +60,7 @@ class GameScreen(private val ecsWorld: EcsWorld, private val physicsWorld: Physi
         }).add(PlayerComponent())
 
         Gdx.input.inputProcessor = InputMultiplexer(KeyboardHandler(ecsWorld.getEntity(playerEntity), eventSystem), stage)
+        gamePadHandler.injectPlayerEntity(ecsWorld.getEntity(playerEntity))
     }
 
     override fun dispose() {

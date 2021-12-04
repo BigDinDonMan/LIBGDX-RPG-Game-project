@@ -54,7 +54,7 @@ class RPGProjectGame : KtxGame<Screen>() {
         RemovalService.init(ecsWorld, physicsWorld)
 
         addScreen(MainMenuScreen(mainCamera))
-        addScreen(GameScreen(ecsWorld, physicsWorld, eventBus, mainCamera))
+        addScreen(GameScreen(ecsWorld, physicsWorld, eventBus, mainCamera, gamePadHandler))
         setScreen<GameScreen>() //temporarily, for testing purposes
     }
 
