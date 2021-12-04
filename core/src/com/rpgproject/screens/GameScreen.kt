@@ -22,13 +22,14 @@ import com.rpgproject.util.ecs.RemovalService
 import com.rpgproject.util.heightF
 import com.rpgproject.util.ui.update
 import com.rpgproject.util.widthF
+import de.golfgl.gdx.controllers.ControllerMenuStage
 import ktx.app.KtxScreen
 import net.mostlyoriginal.api.event.common.EventSystem
 
 class GameScreen(private val ecsWorld: EcsWorld, private val physicsWorld: PhysicsWorld, private val eventSystem: EventSystem, private val camera: Camera) : KtxScreen {
 
     private val viewport = StretchViewport(Gdx.graphics.widthF(), Gdx.graphics.heightF())
-    private val stage = Stage(viewport)
+    private val stage = ControllerMenuStage(viewport)
     private val inventoryWindow = InventoryWindow("Inventory", Skin(Gdx.files.internal("skins/uiskin.json")))
 
     init {

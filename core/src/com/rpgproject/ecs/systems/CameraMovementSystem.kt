@@ -25,7 +25,7 @@ class CameraMovementSystem(val camera: Camera, val cameraSpeed: Float = 0.5f) : 
     var rigidBodyMapper: ComponentMapper<RigidBodyComponent>? = null
 
     private var isShaking = false
-    private var maxShakeMagnitude = 5f
+    private var maxShakeMagnitude = 5.0
     private var shakeDuration = 0.5f
     private var currentShakeDuration = 0f
     private var interpolationPosition = Vector3()
@@ -35,7 +35,7 @@ class CameraMovementSystem(val camera: Camera, val cameraSpeed: Float = 0.5f) : 
     @Subscribe
     fun startShaking(e: CameraShakeEvent) {
         isShaking = true
-        maxShakeMagnitude = e.magnitude
+        maxShakeMagnitude = e.magnitude.toDouble()
         shakeDuration = e.duration
         currentShakeDuration = 0f
         interpolationPosition.set(cameraPosition)
@@ -53,12 +53,12 @@ class CameraMovementSystem(val camera: Camera, val cameraSpeed: Float = 0.5f) : 
         val playerX = rigidBody.physicsBody!!.position.x
         val playerY = rigidBody.physicsBody!!.position.y
         targetPosition.set(playerX, playerY, transform.position.z)
-        if (isShaking) {
+        if (isShaking) { //todo: add smoothing to shake magnitude (make it shake less if its close to stopping the shaking, e.g. using lerp)
             interpolationPosition.interpolate(targetPosition, cameraSpeed, Interpolation.smooth2)
             cameraPosition.set(interpolationPosition)
             cameraPosition.add(
-                    Random.nextDouble(-maxShakeMagnitude.toDouble(), maxShakeMagnitude.toDouble()).toFloat(),
-                    Random.nextDouble(-maxShakeMagnitude.toDouble(), maxShakeMagnitude.toDouble()).toFloat(),
+                    Random.nextDouble(-maxShakeMagnitude, maxShakeMagnitude).toFloat(),
+                    Random.nextDouble(-maxShakeMagnitude, maxShakeMagnitude).toFloat(),
                     0f
             )
             currentShakeDuration += Gdx.graphics.deltaTime
