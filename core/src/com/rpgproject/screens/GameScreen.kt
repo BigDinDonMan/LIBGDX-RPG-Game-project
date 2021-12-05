@@ -101,6 +101,7 @@ class GameScreen(private val ecsWorld: EcsWorld, private val physicsWorld: Physi
         updateInventorySelection(controller, mapping)
     }
 
+    //todo: move this clusterfuck to separate event-based handlers because my god this looks bad
     private fun updateInventorySelection(controller: Controller?, mapping: ControllerMapping?) {
         if (inventoryWindow.isVisible) {
             if (mapping != null && controller != null) {
