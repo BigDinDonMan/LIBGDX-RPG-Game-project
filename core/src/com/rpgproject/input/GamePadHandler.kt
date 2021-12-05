@@ -3,6 +3,7 @@ package com.rpgproject.input
 import com.artemis.Entity
 import com.badlogic.gdx.controllers.Controller
 import com.badlogic.gdx.controllers.ControllerAdapter
+import com.badlogic.gdx.controllers.ControllerMapping
 import com.badlogic.gdx.controllers.Controllers
 import com.rpgproject.ecs.events.specific.PlayerInputEvent
 import com.rpgproject.util.input.ControllerInputMappings
@@ -18,7 +19,8 @@ class GamePadHandler(val eventSystem: EventSystem) : ControllerAdapter() {
     private var xAxisInput = 0f
     private var yAxisInput = 0f
 
-    private var currentController: Controller? = null
+    var currentController: Controller? = null
+    var mapping: ControllerMapping? = null
 
     init {
         Controllers.addListener(this)
@@ -29,6 +31,7 @@ class GamePadHandler(val eventSystem: EventSystem) : ControllerAdapter() {
         if (controller != null) {
             controller.addListener(this)
             currentController = controller
+            mapping = controller.mapping
         }
     }
 
@@ -38,6 +41,7 @@ class GamePadHandler(val eventSystem: EventSystem) : ControllerAdapter() {
 
     override fun disconnected(controller: Controller?) {
         currentController = null //just dont care which is disconnected because thats a single player game
+        mapping = null
     }
 
     override fun buttonDown(controller: Controller?, buttonIndex: Int): Boolean {

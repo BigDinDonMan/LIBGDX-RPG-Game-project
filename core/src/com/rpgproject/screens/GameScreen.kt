@@ -3,10 +3,13 @@ package com.rpgproject.screens
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.InputMultiplexer
+import com.badlogic.gdx.controllers.Controller
+import com.badlogic.gdx.controllers.ControllerMapping
 import com.badlogic.gdx.graphics.Camera
 import com.badlogic.gdx.physics.box2d.BodyDef
 import com.badlogic.gdx.physics.box2d.FixtureDef
 import com.badlogic.gdx.physics.box2d.PolygonShape
+import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.utils.viewport.StretchViewport
 import com.rpgproject.ecs.components.PlayerComponent
@@ -20,16 +23,16 @@ import com.rpgproject.util.EcsWorld
 import com.rpgproject.util.PhysicsWorld
 import com.rpgproject.util.ecs.RemovalService
 import com.rpgproject.util.heightF
+import com.rpgproject.util.ui.simulateClick
 import com.rpgproject.util.ui.update
 import com.rpgproject.util.widthF
-import de.golfgl.gdx.controllers.ControllerMenuStage
 import ktx.app.KtxScreen
 import net.mostlyoriginal.api.event.common.EventSystem
 
 class GameScreen(private val ecsWorld: EcsWorld, private val physicsWorld: PhysicsWorld, private val eventSystem: EventSystem, private val camera: Camera, private val gamePadHandler: GamePadHandler) : KtxScreen {
 
     private val viewport = StretchViewport(Gdx.graphics.widthF(), Gdx.graphics.heightF())
-    private val stage = ControllerMenuStage(viewport)
+    private val stage = Stage(viewport)
     private val inventoryWindow = InventoryWindow("Inventory", Skin(Gdx.files.internal("skins/uiskin.json")))
 
     init {
@@ -85,13 +88,45 @@ class GameScreen(private val ecsWorld: EcsWorld, private val physicsWorld: Physi
                 Gdx.graphics.widthF() / 2 - inventoryWindow.width / 2,
                 Gdx.graphics.heightF() / 2 - inventoryWindow.height / 2)
         inventoryWindow.isVisible = false
-        inventoryWindow.slots.forEach(stage::addFocusableActor)
-        stage.setFocusedActor(inventoryWindow.slots.first())
     }
 
     private fun pollInputForUI() {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.I)) {
+        val mapping = gamePadHandler.mapping
+        val controller = gamePadHandler.currentController
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.I) || controller?.getButton(mapping!!.buttonStart) == true) {
             inventoryWindow.isVisible = !inventoryWindow.isVisible
+        }
+
+        updateInventorySelection(controller, mapping)
+    }
+
+    private fun updateInventorySelection(controller: Controller?, mapping: ControllerMapping?) {
+        if (inventoryWindow.isVisible) {
+            if (mapping != null && controller != null) {
+                if (controller.getButton(mapping.buttonDpadLeft)) {
+                    inventoryWindow.moveLeft()
+                }
+
+                if (controller.getButton(mapping.buttonDpadRight)) {
+                    inventoryWindow.moveRight()
+                }
+
+                if (controller.getButton(mapping.buttonA)) {
+                    println("elo")
+                    inventoryWindow.currentSlot().simulateClick()
+                }
+            } else {
+                if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) {
+                    inventoryWindow.moveLeft()
+                }
+                if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)) {
+                    inventoryWindow.moveRight()
+                }
+                if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
+                    inventoryWindow.currentSlot().simulateClick()
+                }
+            }
         }
     }
 }

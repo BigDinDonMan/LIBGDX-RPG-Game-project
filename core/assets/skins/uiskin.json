@@ -132,7 +132,8 @@
     },
     blue: {
       down: button-blue-down,
-      up: button-blue
+      up: button-blue,
+      over: button-blue
     },
     toggle: {
       checked: button-down,
