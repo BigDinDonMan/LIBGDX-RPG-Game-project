@@ -27,10 +27,11 @@ class InventoryWindow : Window {
         add(slotsTable).align(Align.bottomLeft).expand()
         slotsTable.setFillParent(true)
         slotsTable.debug()
+        var index = 0
         for (i in 0 until rows) {
             slotsTable.row().expandX()
             for (j in 0 until slotsPerRow) {
-                val slot = InventorySlot(skin, i * j + j)
+                val slot = InventorySlot(skin, index++)
                 slots += slot
                 slotsTable.add(slot).width(75f).height(75f).pad(5f)
             }

@@ -58,6 +58,5 @@ class PlayerInputSystem : IteratingSystem() {
             eventSystem?.dispatch(CameraShakeEvent(2f, Random.nextFloat() * 5f))
             attack = false
         }
-        println(playerMoveDirection)
     }
 }
