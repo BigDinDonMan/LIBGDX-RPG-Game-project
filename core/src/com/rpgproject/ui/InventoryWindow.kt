@@ -1,14 +1,17 @@
 package com.rpgproject.ui
 
+import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.Window
 import com.badlogic.gdx.utils.Align
 import com.rpgproject.inventory.Inventory
+import de.golfgl.gdx.controllers.ControllerMenuStage
+import de.golfgl.gdx.controllers.IControllerManageFocus
 
 //this class will subscribe to Inventory.itemAdded and Inventory.itemRemoved component to properly update the ui
-class InventoryWindow : Window {
+class InventoryWindow : Window, IControllerManageFocus {
 
     val slots = ArrayList<ImageButton>()
     private val slotsTable = Table()
@@ -25,7 +28,7 @@ class InventoryWindow : Window {
         val slotsPerRow = 6 //might be subject to change
         val rows = Inventory.items.size / slotsPerRow
         add(slotsTable).align(Align.bottomLeft).expand()
-        slotsTable.setFillParent(true)
+//        slotsTable.setFillParent(true)
         slotsTable.debug()
         var index = 0
         for (i in 0 until rows) {
@@ -40,5 +43,13 @@ class InventoryWindow : Window {
 
     private fun setUpInventoryListeners() {
         //todo: setup onItemAdded and onItemRemoved and subscribe to them here, to make them update the UI when new items are added or removed
+    }
+
+    override fun getNextFocusableActor(direction: ControllerMenuStage.MoveFocusDirection?): Actor {
+        TODO("Not yet implemented")
+    }
+
+    override fun getNextFocusableActor(next: Boolean): Actor {
+        TODO("Not yet implemented")
     }
 }
