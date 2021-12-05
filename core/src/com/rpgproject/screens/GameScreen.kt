@@ -85,8 +85,8 @@ class GameScreen(private val ecsWorld: EcsWorld, private val physicsWorld: Physi
                 Gdx.graphics.widthF() / 2 - inventoryWindow.width / 2,
                 Gdx.graphics.heightF() / 2 - inventoryWindow.height / 2)
         inventoryWindow.isVisible = false
-//        inventoryWindow.slots.forEach(stage::addFocusableActor)
-//        stage.setFocusedActor(inventoryWindow.slots.first())
+        inventoryWindow.slots.forEach(stage::addFocusableActor)
+        stage.setFocusedActor(inventoryWindow.slots.first())
     }
 
     private fun pollInputForUI() {

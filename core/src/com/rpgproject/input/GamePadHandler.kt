@@ -6,6 +6,7 @@ import com.badlogic.gdx.controllers.ControllerAdapter
 import com.badlogic.gdx.controllers.Controllers
 import com.rpgproject.ecs.events.specific.PlayerInputEvent
 import com.rpgproject.util.input.ControllerInputMappings
+import com.rpgproject.util.math.isClose
 import net.mostlyoriginal.api.event.common.EventSystem
 
 //todo: set this as an abstract class
@@ -41,15 +42,21 @@ class GamePadHandler(val eventSystem: EventSystem) : ControllerAdapter() {
 
     override fun buttonDown(controller: Controller?, buttonIndex: Int): Boolean {
         println(buttonIndex)
-        return super.buttonDown(controller, buttonIndex)
+        return true
     }
 
     override fun axisMoved(controller: Controller?, axisIndex: Int, value: Float): Boolean {
         if (axisIndex == ControllerInputMappings.X_AXIS) {
             xAxisInput = value
+            if (xAxisInput.isClose(0f, 0.1f)) { //I thought this was going to be stupid but it somehow works well
+                xAxisInput = 0f
+            }
         }
         if (axisIndex == ControllerInputMappings.Y_AXIS) {
             yAxisInput = -value //for some reason, y axis goes into negatives if you go upwards
+            if (yAxisInput.isClose(0f, 0.1f)) {
+                yAxisInput = 0f
+            }
         }
         //todo: tbh, I think its time to split this event into separate ones (move direction event, attack event, etc., or change it into keyboard and gamepad events)
         eventSystem.dispatch(PlayerInputEvent(playerEntity!!, xAxisInput, yAxisInput, false, false, false))
