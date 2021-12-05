@@ -2,8 +2,12 @@ package com.rpgproject.inventory
 
 import com.rpgproject.util.observer.DoubleArgGameEvent
 
+//maybe add onItemChanged callback?
 object Inventory {
-    val items = Array<InventoryItem?>(24) { null }
+
+    private const val inventorySize = 24
+
+    val items = Array<InventoryItem?>(inventorySize) { null }
     var currency = 0
 
     //<editor-fold desc="Inventory callbacks">

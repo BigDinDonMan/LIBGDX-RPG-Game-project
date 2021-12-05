@@ -124,6 +124,12 @@ class GameScreen(private val ecsWorld: EcsWorld, private val physicsWorld: Physi
                 if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)) {
                     inventoryWindow.moveRight()
                 }
+                if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
+                    inventoryWindow.moveUp()
+                }
+                if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
+                    inventoryWindow.moveDown()
+                }
                 if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
                     inventoryWindow.currentSlot().simulateClick()
                 }
