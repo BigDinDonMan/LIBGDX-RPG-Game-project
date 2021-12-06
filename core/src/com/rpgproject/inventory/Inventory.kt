@@ -8,6 +8,7 @@ object Inventory {
     private const val inventorySize = 24
 
     val items = Array<InventoryItem?>(inventorySize) { null }
+    //todo: make animated currency display (incrementing upwards/downwards, e.g. like in stardew valley)
     var currency = 0
 
     //<editor-fold desc="Inventory callbacks">
