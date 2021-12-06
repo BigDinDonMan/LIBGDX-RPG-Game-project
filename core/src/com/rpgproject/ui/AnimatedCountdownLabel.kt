@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor
 import kotlin.math.abs
 import kotlin.math.ceil
 
+//todo: add skin/font here
 class AnimatedCountdownLabel(val prefix: String, startingValue: Int): Actor() {
     private val font: BitmapFont = BitmapFont()
     private var animating = false
