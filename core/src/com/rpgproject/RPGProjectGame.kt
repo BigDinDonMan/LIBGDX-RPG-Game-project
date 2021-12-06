@@ -53,6 +53,8 @@ class RPGProjectGame : KtxGame<Screen>() {
 
         RemovalService.init(ecsWorld, physicsWorld)
 
+        loadI18nBundles()
+
         addScreen(MainMenuScreen(mainCamera))
         addScreen(GameScreen(ecsWorld, physicsWorld, eventBus, mainCamera, gamePadHandler))
         setScreen<GameScreen>() //temporarily, for testing purposes
@@ -93,5 +95,9 @@ class RPGProjectGame : KtxGame<Screen>() {
         config.setSystem(serializationManager)
         ecsWorld = EcsWorld(config)
         serializationManager.setSerializer(JsonArtemisSerializer(ecsWorld))
+    }
+
+    private fun loadI18nBundles() {
+
     }
 }
