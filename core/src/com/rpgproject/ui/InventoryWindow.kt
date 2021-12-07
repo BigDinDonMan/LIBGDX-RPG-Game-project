@@ -98,9 +98,6 @@ class InventoryWindow : Window, UIController {
 
     override fun handleGamePadButton(controller: Controller?, buttonCode: Int): Boolean {
         val mapping = controller?.mapping ?: return false
-        if (buttonCode == mapping.buttonStart) {
-            this.isVisible = !this.isVisible
-        }
 
         if (!isVisible) return false
 

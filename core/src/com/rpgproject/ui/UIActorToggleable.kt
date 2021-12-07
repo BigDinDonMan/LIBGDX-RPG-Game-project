@@ -9,19 +9,23 @@ interface UIActorToggleable {
     val stage: Stage
     val toggleables: ObjectMap<Int, Actor>
 
-    fun addToggleableActor(code: Int, toggleable: Actor) = this.toggleables.put(code, toggleable)
+    fun addToggleableActor(code: Int, toggleable: Actor) {
+        this.toggleables.put(code, toggleable)
+    }
 
-    fun getCurrentlyFocusedActor(): UIController? = stage.actors.filterIsInstance<UIController>().first { (it as Actor).isVisible }
+    fun getControlledActors() = this.stage.actors.filterIsInstance<UIController>()
 
     //code is either gamepad button code or key code
     fun handleToggle(code: Int):Boolean {
         return if (toggleables.containsKey(code)) {
             toggleables[code].isVisible = !toggleables[code].isVisible
+            println(toggleables[code].isVisible)
             for (key in toggleables.keys()) {
                 if (key != code) {
                     toggleables[key].isVisible = false
                 }
             }
+            println(toggleables[code].isVisible)
             true
         } else false
     }
