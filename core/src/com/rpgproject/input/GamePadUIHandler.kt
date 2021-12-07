@@ -16,7 +16,7 @@ class GamePadUIHandler(override val stage: Stage) : ControllerAdapter(), UIActor
 
     init {
         Controllers.addListener(this)
-        Controllers.getCurrent().addListener(this)
+        Controllers.getCurrent()?.addListener(this)
     }
 
     override fun connected(controller: Controller?) {
@@ -24,7 +24,6 @@ class GamePadUIHandler(override val stage: Stage) : ControllerAdapter(), UIActor
     }
 
     override fun buttonDown(controller: Controller?, buttonIndex: Int): Boolean {
-        println("xd ${buttonIndex}")
         handleToggle(buttonIndex)
         return false
     }

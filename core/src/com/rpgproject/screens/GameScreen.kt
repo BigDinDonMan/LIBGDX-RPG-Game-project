@@ -19,6 +19,7 @@ import com.rpgproject.ecs.systems.InteractionSystem
 import com.rpgproject.input.GamePadHandler
 import com.rpgproject.input.GamePadUIHandler
 import com.rpgproject.input.KeyboardHandler
+import com.rpgproject.input.KeyboardUIHandler
 import com.rpgproject.ui.AnimatedCountdownLabel
 import com.rpgproject.ui.InventoryWindow
 import com.rpgproject.util.EcsWorld
@@ -37,6 +38,7 @@ class GameScreen(private val ecsWorld: EcsWorld, private val physicsWorld: Physi
     private val stage = Stage(viewport)
     private val inventoryWindow = InventoryWindow("Inventory", Skin(Gdx.files.internal("skins/uiskin.json")))
     private val moneyDisplay = AnimatedCountdownLabel("", 0)
+    //this needs to be first; if we return false from buttonDown then it gets passed to the other listener
     private val gamePadUIHandler = GamePadUIHandler(stage)
     private val gamePadHandler = GamePadHandler(eventSystem)
 
@@ -68,6 +70,7 @@ class GameScreen(private val ecsWorld: EcsWorld, private val physicsWorld: Physi
         }).add(PlayerComponent())
 
         Gdx.input.inputProcessor = InputMultiplexer(
+            KeyboardUIHandler(),
             KeyboardHandler(ecsWorld.getEntity(playerEntity), eventSystem),
             stage
         )
@@ -117,6 +120,7 @@ class GameScreen(private val ecsWorld: EcsWorld, private val physicsWorld: Physi
     //todo: move this clusterfuck to separate event-based handlers because my god this looks bad
     private fun updateInventorySelection(controller: Controller?, mapping: ControllerMapping?) {
         if (inventoryWindow.isVisible) {
+            //todo: move this to gamepad ui handler
             if (mapping != null && controller != null) {
                 if (controller.getButton(mapping.buttonDpadLeft)) {
                     inventoryWindow.moveLeft()
@@ -131,6 +135,7 @@ class GameScreen(private val ecsWorld: EcsWorld, private val physicsWorld: Physi
                     inventoryWindow.currentSlot().simulateClick()
                 }
             } else {
+                //todo: move this to keyboard ui handler
                 if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) {
                     inventoryWindow.moveLeft()
                 }
