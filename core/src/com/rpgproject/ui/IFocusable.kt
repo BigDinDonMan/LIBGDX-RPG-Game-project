@@ -1,6 +1,6 @@
 package com.rpgproject.ui
 
 interface IFocusable {
-    fun gainFocus()
-    fun loseFocus()
+    fun handleKeyboardKey(keyCode: Int)
+    fun handleGamePadButton(buttonCode: Int)
 }

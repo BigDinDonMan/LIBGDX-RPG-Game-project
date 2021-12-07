@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.Window
+import com.badlogic.gdx.utils.Align
 import com.rpgproject.inventory.Inventory
 
 //this class will subscribe to Inventory.itemAdded and Inventory.itemRemoved component to properly update the ui
@@ -11,7 +12,7 @@ class InventoryWindow : Window {
 
     val slots = ArrayList<InventorySlot>()
     private val slotsTable = Table()
-    private var slotsPerRow = 6
+    private var slotsPerRow = 8
     private var currentSlotIndex = 0
     private val defaultColor = Color(51f,51f,51f,255f)
     private val selectionColor = Color.YELLOW
@@ -26,20 +27,18 @@ class InventoryWindow : Window {
 
     private fun initUI() {
         val rows = Inventory.items.size / slotsPerRow
-        slotsTable.setFillParent(true)
-        add(slotsTable).bottom()
-        slotsTable.debug()
+        this.align(Align.bottomLeft)
+        add(slotsTable).bottom().left()
         var index = 0
         for (i in 0 until rows) {
-            slotsTable.row().expandX()
+            slotsTable.row().grow()
             for (j in 0 until slotsPerRow) {
                 val slot = InventorySlot(skin, index++)
                 slots += slot
-                slotsTable.add(slot).width(75f).
-                height(75f).pad(5f)
+                slotsTable.add(slot).prefSize(75f, 75f).pad(5f)
             }
         }
-        slots[0].setColor(selectionColor)
+        slots[0].color = selectionColor
     }
 
     private fun setUpInventoryListeners() {
@@ -50,8 +49,8 @@ class InventoryWindow : Window {
         val oldSlot = slots[oldIndex]
         val currentSlot = slots[newIndex]
 
-        oldSlot.setColor(defaultColor)
-        currentSlot.setColor(selectionColor)
+        oldSlot.color = defaultColor
+        currentSlot.color = selectionColor
     }
 
     fun currentSlot(): InventorySlot = this.slots[currentSlotIndex]

@@ -18,6 +18,7 @@ import com.rpgproject.ecs.components.TransformComponent
 import com.rpgproject.ecs.systems.InteractionSystem
 import com.rpgproject.input.GamePadHandler
 import com.rpgproject.input.KeyboardHandler
+import com.rpgproject.ui.AnimatedCountdownLabel
 import com.rpgproject.ui.InventoryWindow
 import com.rpgproject.util.EcsWorld
 import com.rpgproject.util.PhysicsWorld
@@ -34,7 +35,7 @@ class GameScreen(private val ecsWorld: EcsWorld, private val physicsWorld: Physi
     private val viewport = StretchViewport(Gdx.graphics.widthF(), Gdx.graphics.heightF())
     private val stage = Stage(viewport)
     private val inventoryWindow = InventoryWindow("Inventory", Skin(Gdx.files.internal("skins/uiskin.json")))
-//    private val moneyDisplay = AnimatedCountdownLabel("", 0)
+    private val moneyDisplay = AnimatedCountdownLabel("", 0)
 
     init {
         setupUI()
@@ -90,8 +91,8 @@ class GameScreen(private val ecsWorld: EcsWorld, private val physicsWorld: Physi
                 Gdx.graphics.heightF() / 2 - inventoryWindow.height / 2)
         inventoryWindow.isVisible = false
 
-//        stage.addActor(moneyDisplay)
-//        moneyDisplay.setPosition(25f, Gdx.graphics.heightF() - 25f)
+        stage.addActor(moneyDisplay)
+        moneyDisplay.setPosition(25f, Gdx.graphics.heightF() - 25f)
     }
 
     private fun pollInputForUI() {
@@ -104,9 +105,9 @@ class GameScreen(private val ecsWorld: EcsWorld, private val physicsWorld: Physi
 
         updateInventorySelection(controller, mapping)
 
-//        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-//            moneyDisplay.startCountdown(1500)
-//        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+            moneyDisplay.startCountdown(1500)
+        }
     }
 
     //todo: move this clusterfuck to separate event-based handlers because my god this looks bad
