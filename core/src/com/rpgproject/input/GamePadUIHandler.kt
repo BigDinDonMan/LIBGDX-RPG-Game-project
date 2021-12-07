@@ -12,7 +12,7 @@ import com.rpgproject.ui.UIActorToggleable
 //todo: add handleKey and handleButton methods in IFocusable (or add another interface) with signature like fun(keyCode: Input.Keys): Unit (or boolean?) and fun (buttonCode: Int)
 //todo: unregister listener on object deletion
 class GamePadUIHandler(override val stage: Stage) : ControllerAdapter(), UIActorToggleable {
-    override val toggleable = ObjectMap<Int, Actor>() //todo: think about this...
+    override val toggleables = ObjectMap<Int, Actor>() //todo: think about this...
 
     init {
         Controllers.addListener(this)
