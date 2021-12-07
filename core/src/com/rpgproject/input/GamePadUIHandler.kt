@@ -25,7 +25,6 @@ class GamePadUIHandler(override val stage: Stage) : ControllerAdapter(), UIActor
 
     override fun buttonDown(controller: Controller?, buttonIndex: Int): Boolean {
         handleToggle(buttonIndex)
-        val ret = getControlledActors().any { a -> a.handleGamePadButton(controller, buttonIndex) }
-        return ret
+        return getControlledActors().any { a -> a.handleGamePadButton(controller, buttonIndex) }
     }
 }
