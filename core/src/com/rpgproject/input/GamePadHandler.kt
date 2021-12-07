@@ -23,7 +23,7 @@ class GamePadHandler(val eventSystem: EventSystem) : ControllerAdapter() {
     var mapping: ControllerMapping? = null
 
     init {
-        Controllers.addListener(this)
+        Controllers.addListener(this) //todo: unregister listener on object deletion
         setUpController(Controllers.getCurrent())
     }
 

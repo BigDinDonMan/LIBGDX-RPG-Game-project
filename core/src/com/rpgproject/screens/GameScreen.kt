@@ -17,6 +17,7 @@ import com.rpgproject.ecs.components.RigidBodyComponent
 import com.rpgproject.ecs.components.TransformComponent
 import com.rpgproject.ecs.systems.InteractionSystem
 import com.rpgproject.input.GamePadHandler
+import com.rpgproject.input.GamePadUIHandler
 import com.rpgproject.input.KeyboardHandler
 import com.rpgproject.ui.AnimatedCountdownLabel
 import com.rpgproject.ui.InventoryWindow
@@ -30,12 +31,14 @@ import com.rpgproject.util.widthF
 import ktx.app.KtxScreen
 import net.mostlyoriginal.api.event.common.EventSystem
 
-class GameScreen(private val ecsWorld: EcsWorld, private val physicsWorld: PhysicsWorld, private val eventSystem: EventSystem, private val camera: Camera, private val gamePadHandler: GamePadHandler) : KtxScreen {
+class GameScreen(private val ecsWorld: EcsWorld, private val physicsWorld: PhysicsWorld, private val eventSystem: EventSystem, private val camera: Camera) : KtxScreen {
 
     private val viewport = StretchViewport(Gdx.graphics.widthF(), Gdx.graphics.heightF())
     private val stage = Stage(viewport)
     private val inventoryWindow = InventoryWindow("Inventory", Skin(Gdx.files.internal("skins/uiskin.json")))
     private val moneyDisplay = AnimatedCountdownLabel("", 0)
+    private val gamePadUIHandler = GamePadUIHandler(stage)
+    private val gamePadHandler = GamePadHandler(eventSystem)
 
     init {
         setupUI()
@@ -64,7 +67,10 @@ class GameScreen(private val ecsWorld: EcsWorld, private val physicsWorld: Physi
             shape.dispose()
         }).add(PlayerComponent())
 
-        Gdx.input.inputProcessor = InputMultiplexer(KeyboardHandler(ecsWorld.getEntity(playerEntity), eventSystem), stage)
+        Gdx.input.inputProcessor = InputMultiplexer(
+            KeyboardHandler(ecsWorld.getEntity(playerEntity), eventSystem),
+            stage
+        )
         gamePadHandler.injectPlayerEntity(ecsWorld.getEntity(playerEntity))
     }
 
@@ -93,15 +99,13 @@ class GameScreen(private val ecsWorld: EcsWorld, private val physicsWorld: Physi
 
         stage.addActor(moneyDisplay)
         moneyDisplay.setPosition(25f, Gdx.graphics.heightF() - 25f)
+        gamePadUIHandler.addToggleableActor(6, inventoryWindow)//this is hardcoded for now
+        //todo: think about how to pass mapping/mapping button code into this
     }
 
     private fun pollInputForUI() {
         val mapping = gamePadHandler.mapping
         val controller = gamePadHandler.currentController
-
-        if (Gdx.input.isKeyJustPressed(Input.Keys.I) || controller?.getButton(mapping!!.buttonStart) == true) {
-            inventoryWindow.isVisible = !inventoryWindow.isVisible
-        }
 
         updateInventorySelection(controller, mapping)
 

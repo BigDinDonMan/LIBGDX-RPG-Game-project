@@ -1,25 +1,31 @@
 package com.rpgproject.input
 
+import com.badlogic.gdx.controllers.Controller
 import com.badlogic.gdx.controllers.ControllerAdapter
+import com.badlogic.gdx.controllers.Controllers
 import com.badlogic.gdx.scenes.scene2d.Actor
+import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.ObjectMap
-import com.rpgproject.ui.IFocusable
+import com.rpgproject.ui.UIActorToggleable
 
-//todo: add a map of "togglable" actors with button code as a key and actor as a value
 //same in keyboard ui handler
 //todo: add handleKey and handleButton methods in IFocusable (or add another interface) with signature like fun(keyCode: Input.Keys): Unit (or boolean?) and fun (buttonCode: Int)
-class GamePadUIHandler : ControllerAdapter(), IFocusable {
-    private val togglables = ObjectMap<Int, Actor>()
+//todo: unregister listener on object deletion
+class GamePadUIHandler(override val stage: Stage) : ControllerAdapter(), UIActorToggleable {
+    override val toggleable = ObjectMap<Int, Actor>() //todo: think about this...
 
-    fun addTogglableActor(buttonCode: Int, actor: Actor) {
-        togglables.put(buttonCode, actor)
+    init {
+        Controllers.addListener(this)
+        Controllers.getCurrent().addListener(this)
     }
 
-    override fun handleKeyboardKey(keyCode: Int) {
-        TODO("Not yet implemented")
+    override fun connected(controller: Controller?) {
+        controller?.addListener(this)
     }
 
-    override fun handleGamePadButton(buttonCode: Int) {
-        TODO("Not yet implemented")
+    override fun buttonDown(controller: Controller?, buttonIndex: Int): Boolean {
+        println("xd ${buttonIndex}")
+        handleToggle(buttonIndex)
+        return false
     }
 }

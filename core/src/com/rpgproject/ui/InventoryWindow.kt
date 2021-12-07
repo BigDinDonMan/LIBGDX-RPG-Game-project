@@ -1,5 +1,6 @@
 package com.rpgproject.ui
 
+import com.badlogic.gdx.controllers.Controller
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
@@ -8,7 +9,7 @@ import com.badlogic.gdx.utils.Align
 import com.rpgproject.inventory.Inventory
 
 //this class will subscribe to Inventory.itemAdded and Inventory.itemRemoved component to properly update the ui
-class InventoryWindow : Window {
+class InventoryWindow : Window, UIController {
 
     val slots = ArrayList<InventorySlot>()
     private val slotsTable = Table()
@@ -87,5 +88,22 @@ class InventoryWindow : Window {
         currentSlotIndex += slotsPerRow
         currentSlotIndex %= Inventory.items.size
         onSelectionChanged(oldIndex, currentSlotIndex)
+    }
+
+    override fun handleKeyboardKey(keyCode: Int): Boolean {
+        if (!isVisible) return false
+
+        return true
+    }
+
+    override fun handleGamePadButton(controller: Controller?, buttonCode: Int): Boolean {
+        val mapping = controller?.mapping ?: return false
+        if (buttonCode == mapping.buttonStart) {
+            this.isVisible = !this.isVisible
+        }
+
+        if (!isVisible) return false
+
+        return true
     }
 }
