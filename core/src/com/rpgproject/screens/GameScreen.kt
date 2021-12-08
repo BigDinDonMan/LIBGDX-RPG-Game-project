@@ -41,6 +41,7 @@ class GameScreen(private val ecsWorld: EcsWorld, private val physicsWorld: Physi
     //this needs to be first; if we return false from buttonDown then it gets passed to the other listener
     private val gamePadUIHandler = GamePadUIHandler(stage)
     private val gamePadHandler = GamePadHandler(eventSystem)
+    private val keyboardUIHandler = KeyboardUIHandler(stage)
 
     init {
         setupUI()
@@ -70,7 +71,7 @@ class GameScreen(private val ecsWorld: EcsWorld, private val physicsWorld: Physi
         }).add(PlayerComponent())
 
         Gdx.input.inputProcessor = InputMultiplexer(
-            KeyboardUIHandler(),
+            keyboardUIHandler,
             KeyboardHandler(ecsWorld.getEntity(playerEntity), eventSystem),
             stage
         )
@@ -103,6 +104,7 @@ class GameScreen(private val ecsWorld: EcsWorld, private val physicsWorld: Physi
         stage.addActor(moneyDisplay)
         moneyDisplay.setPosition(25f, Gdx.graphics.heightF() - 25f)
         gamePadUIHandler.addToggleableActor(6, inventoryWindow)//this is hardcoded for now
+        keyboardUIHandler.addToggleableActor(Input.Keys.I, inventoryWindow)
         //todo: think about how to pass mapping/mapping button code into this
     }
 

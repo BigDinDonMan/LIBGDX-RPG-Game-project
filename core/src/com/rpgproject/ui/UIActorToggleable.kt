@@ -19,13 +19,11 @@ interface UIActorToggleable {
     fun handleToggle(code: Int):Boolean {
         return if (toggleables.containsKey(code)) {
             toggleables[code].isVisible = !toggleables[code].isVisible
-            println(toggleables[code].isVisible)
             for (key in toggleables.keys()) {
-                if (key != code) {
+                if (key != code && toggleables[key] !== toggleables[code]) {
                     toggleables[key].isVisible = false
                 }
             }
-            println(toggleables[code].isVisible)
             true
         } else false
     }
