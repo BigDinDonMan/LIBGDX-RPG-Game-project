@@ -6,7 +6,6 @@ import com.badlogic.gdx.controllers.ControllerAdapter
 import com.badlogic.gdx.controllers.ControllerMapping
 import com.badlogic.gdx.controllers.Controllers
 import com.rpgproject.ecs.events.specific.PlayerInputEvent
-import com.rpgproject.util.input.ControllerInputMappings
 import com.rpgproject.util.math.isClose
 import net.mostlyoriginal.api.event.common.EventSystem
 
@@ -39,24 +38,24 @@ class GamePadHandler(val eventSystem: EventSystem) : ControllerAdapter() {
         setUpController(controller)
     }
 
-    override fun disconnected(controller: Controller?) {
+    override fun disconnected(controller: Controller) {
         currentController = null //just dont care which is disconnected because thats a single player game
         mapping = null
     }
 
-    override fun buttonDown(controller: Controller?, buttonIndex: Int): Boolean {
-        println(buttonIndex)
+    override fun buttonDown(controller: Controller, buttonIndex: Int): Boolean {
         return true
     }
 
-    override fun axisMoved(controller: Controller?, axisIndex: Int, value: Float): Boolean {
-        if (axisIndex == ControllerInputMappings.X_AXIS) {
+    override fun axisMoved(controller: Controller, axisIndex: Int, value: Float): Boolean {
+        val mapping = controller.mapping
+        if (axisIndex == mapping.axisLeftX) {
             xAxisInput = value
             if (xAxisInput.isClose(0f, 0.1f)) { //I thought this was going to be stupid but it somehow works well
                 xAxisInput = 0f
             }
         }
-        if (axisIndex == ControllerInputMappings.Y_AXIS) {
+        if (axisIndex == mapping.axisLeftY) {
             yAxisInput = -value //for some reason, y axis goes into negatives if you go upwards
             if (yAxisInput.isClose(0f, 0.1f)) {
                 yAxisInput = 0f

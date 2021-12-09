@@ -14,7 +14,5 @@ class TextureComponent : Component() {
             }
         }
     var region = TextureRegion()
-
-    //maybe add optional shader & color?
     var color: Color = Color.WHITE
 }

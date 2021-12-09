@@ -1,5 +1,6 @@
 package com.rpgproject.ui
 
+import com.badlogic.gdx.Input
 import com.badlogic.gdx.controllers.Controller
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
@@ -7,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.Window
 import com.badlogic.gdx.utils.Align
 import com.rpgproject.inventory.Inventory
+import com.rpgproject.util.ui.simulateClick
 
 //this class will subscribe to Inventory.itemAdded and Inventory.itemRemoved component to properly update the ui
 class InventoryWindow : Window, UIController {
@@ -93,14 +95,35 @@ class InventoryWindow : Window, UIController {
     override fun handleKeyboardKey(keyCode: Int): Boolean {
         if (!isVisible) return false
 
-        return true
+        var handled = true
+
+        when (keyCode) {
+            Input.Keys.LEFT -> moveLeft()
+            Input.Keys.RIGHT -> moveRight()
+            Input.Keys.UP -> moveUp()
+            Input.Keys.DOWN -> moveDown()
+            Input.Keys.ENTER -> currentSlot().simulateClick()
+            else -> handled = false
+        }
+
+        return handled
     }
 
     override fun handleGamePadButton(controller: Controller?, buttonCode: Int): Boolean {
         val mapping = controller?.mapping ?: return false
-
         if (!isVisible) return false
 
-        return true
+        var handled = true
+
+        when (buttonCode) {
+            mapping.buttonDpadLeft -> moveLeft()
+            mapping.buttonDpadRight -> moveRight()
+            mapping.buttonDpadDown -> moveDown()
+            mapping.buttonDpadUp -> moveUp()
+            mapping.buttonA -> currentSlot().simulateClick()
+            else -> handled = false
+        }
+
+        return handled
     }
 }

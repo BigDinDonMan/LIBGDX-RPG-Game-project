@@ -10,6 +10,7 @@ class KeyboardUIHandler(override val stage: Stage) : KtxInputAdapter, UIActorTog
     override val toggleables: ObjectMap<Int, Actor> = ObjectMap()
 
     override fun keyDown(keycode: Int): Boolean {
-        return handleToggle(keycode)
+        handleToggle(keycode)
+        return getControlledActors().any { a -> a.handleKeyboardKey(keycode) }
     }
 }

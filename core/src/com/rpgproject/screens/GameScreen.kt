@@ -3,8 +3,6 @@ package com.rpgproject.screens
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.InputMultiplexer
-import com.badlogic.gdx.controllers.Controller
-import com.badlogic.gdx.controllers.ControllerMapping
 import com.badlogic.gdx.graphics.Camera
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.physics.box2d.BodyDef
@@ -28,7 +26,6 @@ import com.rpgproject.util.EcsWorld
 import com.rpgproject.util.PhysicsWorld
 import com.rpgproject.util.ecs.RemovalService
 import com.rpgproject.util.heightF
-import com.rpgproject.util.ui.simulateClick
 import com.rpgproject.util.ui.update
 import com.rpgproject.util.widthF
 import ktx.app.KtxScreen
@@ -93,8 +90,6 @@ class GameScreen(private val ecsWorld: EcsWorld, private val physicsWorld: Physi
             position.set(50f, 50f, 0f)
             size.set(testTexture.width.toFloat(), testTexture.height.toFloat(), 0f)
         }).add(TextureComponent().apply { texture = testTexture })
-        println(testTransform.size)
-        println(testTransform.origin())
     }
 
     override fun dispose() {
@@ -102,7 +97,6 @@ class GameScreen(private val ecsWorld: EcsWorld, private val physicsWorld: Physi
     }
 
     override fun render(delta: Float) {
-        pollInputForUI()
         stage.update(delta)
         ecsWorld.setDelta(delta).apply { ecsWorld.process() }
         RemovalService.process()
@@ -124,55 +118,5 @@ class GameScreen(private val ecsWorld: EcsWorld, private val physicsWorld: Physi
         moneyDisplay.setPosition(25f, Gdx.graphics.heightF() - 25f)
         gamePadUIHandler.addToggleableActor(6, inventoryWindow)//this is hardcoded for now
         keyboardUIHandler.addToggleableActor(Input.Keys.I, inventoryWindow)
-        //todo: think about how to pass mapping/mapping button code into this
-    }
-
-    private fun pollInputForUI() {
-        val mapping = gamePadHandler.mapping
-        val controller = gamePadHandler.currentController
-
-        updateInventorySelection(controller, mapping)
-
-        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-            moneyDisplay.startCountdown(1500)
-        }
-    }
-
-    //todo: move this clusterfuck to separate event-based handlers because my god this looks bad
-    private fun updateInventorySelection(controller: Controller?, mapping: ControllerMapping?) {
-        if (inventoryWindow.isVisible) {
-            //todo: move this to gamepad ui handler
-            if (mapping != null && controller != null) {
-                if (controller.getButton(mapping.buttonDpadLeft)) {
-                    inventoryWindow.moveLeft()
-                }
-
-                if (controller.getButton(mapping.buttonDpadRight)) {
-                    inventoryWindow.moveRight()
-                }
-
-                if (controller.getButton(mapping.buttonA)) {
-                    println("elo")
-                    inventoryWindow.currentSlot().simulateClick()
-                }
-            } else {
-                //todo: move this to keyboard ui handler
-                if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) {
-                    inventoryWindow.moveLeft()
-                }
-                if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)) {
-                    inventoryWindow.moveRight()
-                }
-                if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
-                    inventoryWindow.moveUp()
-                }
-                if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
-                    inventoryWindow.moveDown()
-                }
-                if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
-                    inventoryWindow.currentSlot().simulateClick()
-                }
-            }
-        }
     }
 }
