@@ -2,7 +2,6 @@ package com.rpgproject.util.math
 
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
-import com.badlogic.gdx.math.Vector3
 import kotlin.math.abs
 import kotlin.math.pow
 import kotlin.math.sqrt
@@ -20,20 +19,4 @@ fun Float.isClose(other: Float, eps: Float): Boolean {
 
 fun Double.isClose(other: Double, eps: Float): Boolean {
     return abs(this - other) <= eps;
-}
-
-fun Vector2.rotationAngleTo(target: Vector2): Float {
-    return rotationAngleTo(target.x, target.y)
-}
-
-fun Vector2.rotationAngleTo(targetX: Float, targetY: Float): Float {
-    return MathUtils.radiansToDegrees * MathUtils.atan2(targetY - this.y, targetX - this.x)
-}
-
-fun Vector3.rotationAngleTo(target: Vector3): Float {
-    return rotationAngleTo(target.x, target.y)
-}
-
-fun Vector3.rotationAngleTo(targetX: Float, targetY: Float): Float {
-    return MathUtils.radiansToDegrees * MathUtils.atan2(targetY - this.y, targetX - this.x)
 }

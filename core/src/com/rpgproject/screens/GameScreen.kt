@@ -28,7 +28,6 @@ import com.rpgproject.util.EcsWorld
 import com.rpgproject.util.PhysicsWorld
 import com.rpgproject.util.ecs.RemovalService
 import com.rpgproject.util.heightF
-import com.rpgproject.util.math.rotationAngleTo
 import com.rpgproject.util.ui.simulateClick
 import com.rpgproject.util.ui.update
 import com.rpgproject.util.widthF
@@ -134,12 +133,12 @@ class GameScreen(private val ecsWorld: EcsWorld, private val physicsWorld: Physi
             moneyDisplay.startCountdown(1500)
         }
 
-        if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
-            val targetX = Gdx.input.x.toFloat()
-            var targetY = Gdx.input.y.toFloat()
-            val angle = testTransform.position.rotationAngleTo(targetX, targetY)
-            testTransform.rotationAngle = angle
-        }
+//        if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+//            val targetX = Gdx.input.x.toFloat()
+//            var targetY = Gdx.graphics.height - Gdx.input.y.toFloat()
+//            val angle = testTransform.center().rotationAngleTo(targetX, targetY)
+//            testTransform.rotationAngle = angle
+//        }
     }
 
     //todo: move this clusterfuck to separate event-based handlers because my god this looks bad
