@@ -49,6 +49,8 @@ class GameScreen(private val ecsWorld: EcsWorld, private val physicsWorld: Physi
     private val testTexture = Texture(Gdx.files.internal("arrow.png"))
     private var testEntity by Delegates.notNull<Int>()
     private val testTransform = TransformComponent();
+    private var player by Delegates.notNull<Int>()
+    lateinit var playerTransform: TransformComponent
 
     init {
         setupUI()
@@ -57,8 +59,10 @@ class GameScreen(private val ecsWorld: EcsWorld, private val physicsWorld: Physi
 
     private fun spawnTestEntities() {
         val playerEntity = ecsWorld.create()
+        player = playerEntity
         ecsWorld.getSystem(InteractionSystem::class.java).injectPlayerEntity(ecsWorld.getEntity(playerEntity))
         val transform = TransformComponent()
+        playerTransform = transform
         ecsWorld.edit(playerEntity).add(transform.apply {
             size.set(50f, 50f, 0f)
         }).add(RigidBodyComponent().apply {
@@ -98,7 +102,7 @@ class GameScreen(private val ecsWorld: EcsWorld, private val physicsWorld: Physi
     }
 
     override fun render(delta: Float) {
-        pollInputForUI() //todo: maybe extract it to separate input handler and add it to input multiplexer & send events through event system?
+        pollInputForUI()
         stage.update(delta)
         ecsWorld.setDelta(delta).apply { ecsWorld.process() }
         RemovalService.process()
@@ -132,13 +136,6 @@ class GameScreen(private val ecsWorld: EcsWorld, private val physicsWorld: Physi
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
             moneyDisplay.startCountdown(1500)
         }
-
-//        if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
-//            val targetX = Gdx.input.x.toFloat()
-//            var targetY = Gdx.graphics.height - Gdx.input.y.toFloat()
-//            val angle = testTransform.center().rotationAngleTo(targetX, targetY)
-//            testTransform.rotationAngle = angle
-//        }
     }
 
     //todo: move this clusterfuck to separate event-based handlers because my god this looks bad
