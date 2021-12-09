@@ -47,7 +47,13 @@ class RenderSystem(private val spriteBatch: SpriteBatch, private val camera: Cam
         } else {
             spriteBatch.shader = null
         }
-        spriteBatch.draw(texture.texture, transform!!.position.x, transform.position.y)
+
+        spriteBatch.draw(
+            texture.region, transform!!.position.x, transform.position.y,
+            transform.origin().x, transform.origin.y,
+            transform.width(), transform.height(),
+            1f, 1f, transform.rotationAngle
+        )
     }
 
     override fun end() {

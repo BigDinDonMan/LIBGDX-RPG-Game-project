@@ -6,6 +6,7 @@ import com.badlogic.gdx.InputMultiplexer
 import com.badlogic.gdx.controllers.Controller
 import com.badlogic.gdx.controllers.ControllerMapping
 import com.badlogic.gdx.graphics.Camera
+import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.physics.box2d.BodyDef
 import com.badlogic.gdx.physics.box2d.FixtureDef
 import com.badlogic.gdx.physics.box2d.PolygonShape
@@ -14,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.utils.viewport.StretchViewport
 import com.rpgproject.ecs.components.PlayerComponent
 import com.rpgproject.ecs.components.RigidBodyComponent
+import com.rpgproject.ecs.components.TextureComponent
 import com.rpgproject.ecs.components.TransformComponent
 import com.rpgproject.ecs.systems.InteractionSystem
 import com.rpgproject.input.GamePadHandler
@@ -26,11 +28,13 @@ import com.rpgproject.util.EcsWorld
 import com.rpgproject.util.PhysicsWorld
 import com.rpgproject.util.ecs.RemovalService
 import com.rpgproject.util.heightF
+import com.rpgproject.util.math.rotationAngleTo
 import com.rpgproject.util.ui.simulateClick
 import com.rpgproject.util.ui.update
 import com.rpgproject.util.widthF
 import ktx.app.KtxScreen
 import net.mostlyoriginal.api.event.common.EventSystem
+import kotlin.properties.Delegates
 
 class GameScreen(private val ecsWorld: EcsWorld, private val physicsWorld: PhysicsWorld, private val eventSystem: EventSystem, private val camera: Camera) : KtxScreen {
 
@@ -42,6 +46,10 @@ class GameScreen(private val ecsWorld: EcsWorld, private val physicsWorld: Physi
     private val gamePadUIHandler = GamePadUIHandler(stage)
     private val gamePadHandler = GamePadHandler(eventSystem)
     private val keyboardUIHandler = KeyboardUIHandler(stage)
+
+    private val testTexture = Texture(Gdx.files.internal("arrow.png"))
+    private var testEntity by Delegates.notNull<Int>()
+    private val testTransform = TransformComponent();
 
     init {
         setupUI()
@@ -76,6 +84,14 @@ class GameScreen(private val ecsWorld: EcsWorld, private val physicsWorld: Physi
             stage
         )
         gamePadHandler.injectPlayerEntity(ecsWorld.getEntity(playerEntity))
+
+        testEntity = ecsWorld.create()
+        ecsWorld.edit(testEntity).add(testTransform.apply {
+            position.set(50f, 50f, 0f)
+            size.set(testTexture.width.toFloat(), testTexture.height.toFloat(), 0f)
+        }).add(TextureComponent().apply { texture = testTexture })
+        println(testTransform.size)
+        println(testTransform.origin())
     }
 
     override fun dispose() {
@@ -116,6 +132,13 @@ class GameScreen(private val ecsWorld: EcsWorld, private val physicsWorld: Physi
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
             moneyDisplay.startCountdown(1500)
+        }
+
+        if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+            val targetX = Gdx.input.x.toFloat()
+            var targetY = Gdx.input.y.toFloat()
+            val angle = testTransform.position.rotationAngleTo(targetX, targetY)
+            testTransform.rotationAngle = angle
         }
     }
 

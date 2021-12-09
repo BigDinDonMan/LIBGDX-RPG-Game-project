@@ -7,6 +7,7 @@ import com.artemis.systems.IteratingSystem
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Camera
 import com.badlogic.gdx.math.Interpolation
+import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector3
 import com.rpgproject.ecs.components.PlayerComponent
 import com.rpgproject.ecs.components.RigidBodyComponent
@@ -25,7 +26,7 @@ class CameraMovementSystem(val camera: Camera, val cameraSpeed: Float = 0.5f) : 
     var rigidBodyMapper: ComponentMapper<RigidBodyComponent>? = null
 
     private var isShaking = false
-    private var maxShakeMagnitude = 5.0
+    private var shakeMagnitude = 5.0
     private var shakeDuration = 0.5f
     private var currentShakeDuration = 0f
     private var interpolationPosition = Vector3()
@@ -35,7 +36,7 @@ class CameraMovementSystem(val camera: Camera, val cameraSpeed: Float = 0.5f) : 
     @Subscribe
     fun startShaking(e: CameraShakeEvent) {
         isShaking = true
-        maxShakeMagnitude = e.magnitude.toDouble()
+        shakeMagnitude = e.magnitude.toDouble()
         shakeDuration = e.duration
         currentShakeDuration = 0f
         interpolationPosition.set(cameraPosition)
@@ -53,15 +54,15 @@ class CameraMovementSystem(val camera: Camera, val cameraSpeed: Float = 0.5f) : 
         val playerX = rigidBody.physicsBody!!.position.x
         val playerY = rigidBody.physicsBody!!.position.y
         targetPosition.set(playerX, playerY, transform.position.z)
-        //todo: check if constant for smoothing speed will be sufficient, if not - make smoothing speed dependent on maxShakeMagnitude
-        if (isShaking) { //todo: add smoothing to shake magnitude (make it shake less if its close to stopping the shaking, e.g. using lerp instead of randomizing the strength)
+        if (isShaking) {
             interpolationPosition.interpolate(targetPosition, cameraSpeed, Interpolation.smooth2)
             cameraPosition.set(interpolationPosition)
             cameraPosition.add(
-                    Random.nextDouble(-maxShakeMagnitude, maxShakeMagnitude).toFloat(),
-                    Random.nextDouble(-maxShakeMagnitude, maxShakeMagnitude).toFloat(),
+                    Random.nextDouble(-shakeMagnitude, shakeMagnitude).toFloat(),
+                    Random.nextDouble(-shakeMagnitude, shakeMagnitude).toFloat(),
                     0f
             )
+            shakeMagnitude = MathUtils.lerp(shakeMagnitude.toFloat(), 0f, 0.05f).toDouble()
             currentShakeDuration += Gdx.graphics.deltaTime
             if (currentShakeDuration >= shakeDuration) {
                 currentShakeDuration = 0f
