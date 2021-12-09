@@ -37,3 +37,5 @@ fun getRotationAngle(direction: Vector2): Float {
 fun getRotationAngle(directionX: Float, directionY: Float): Float {
     return MathUtils.atan2(directionY, directionX) * MathUtils.radiansToDegrees
 }
+
+//todo: implement voronoi and perlin noise algorithms (maybe some others?)
