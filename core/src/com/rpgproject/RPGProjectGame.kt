@@ -7,12 +7,18 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.Screen
 import com.badlogic.gdx.assets.AssetManager
+import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver
 import com.badlogic.gdx.graphics.OrthographicCamera
+import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader
+import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.Box2D
 import com.rpgproject.ecs.systems.*
 import com.rpgproject.screens.GameScreen
+import com.rpgproject.screens.LoadingScreen
 import com.rpgproject.screens.MainMenuScreen
 import com.rpgproject.util.EcsWorld
 import com.rpgproject.util.PhysicsWorld
@@ -42,6 +48,7 @@ class RPGProjectGame : KtxGame<Screen>() {
         Box2D.init()
         Instance = this
         assetManager = AssetManager()
+        initTtfFontSupport()
         batch = SpriteBatch()
         mainCamera = OrthographicCamera(Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat())
         physicsWorld = PhysicsWorld(Vector2(0f, -10f), false)
@@ -52,6 +59,7 @@ class RPGProjectGame : KtxGame<Screen>() {
 
         loadI18nBundles()
 
+        addScreen(LoadingScreen(assetManager))
         addScreen(MainMenuScreen(mainCamera))
         addScreen(GameScreen(ecsWorld, physicsWorld, eventBus, mainCamera))
         setScreen<GameScreen>() //temporarily, for testing purposes
@@ -96,5 +104,11 @@ class RPGProjectGame : KtxGame<Screen>() {
 
     private fun loadI18nBundles() {
 
+    }
+
+    private fun initTtfFontSupport() {
+        val resolver = InternalFileHandleResolver()
+        assetManager.setLoader(FreeTypeFontGenerator::class.java, FreeTypeFontGeneratorLoader(resolver))
+        assetManager.setLoader(BitmapFont::class.java, ".ttf", FreetypeFontLoader(resolver))
     }
 }
