@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.Color
 import com.rpgproject.ecs.components.*
 import com.rpgproject.ecs.events.specific.PlayerInputEvent
 import com.rpgproject.inventory.Inventory
-import com.rpgproject.inventory.InventoryItem
 import com.rpgproject.util.GLType
 import com.rpgproject.util.assets.ShaderStorage
 import com.rpgproject.util.collections.set
@@ -93,13 +92,15 @@ class InteractionSystem : BaseEntitySystem() {
                 //note: if its a pickup then it has to have inventory item component and texture component instances
                 InteractableComponent.InteractableObjectType.PICKUP -> {
                     println("picking up!")
-                    val itemTextureComp = textureMapper!!.get(closestEntityId)
                     val itemComp = inventoryItemMapper!!.get(closestEntityId)
-                    if (itemComp != null && itemTextureComp?.texture != null) {
-                        val item = InventoryItem(itemComp.name, itemComp.description, itemTextureComp.texture!!)
-                        if (Inventory.addItem(item)) {
+                    if (itemComp != null) {
+                        val remaining = Inventory.addItem(itemComp.item!!, itemComp.amount)
+                        if (remaining <= 0) {
                             //remove entity from the game
                             world.delete(closestEntityId)
+                        } else {
+                            //todo: drop the rest of items on the fokin' ground
+                            itemComp.amount -= remaining
                         }
                     }
                 }

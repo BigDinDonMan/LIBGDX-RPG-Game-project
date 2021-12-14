@@ -44,10 +44,6 @@ class InventoryWindow : Window, UIController {
         slots[0].color = selectionColor
     }
 
-    private fun setUpInventoryListeners() {
-        //todo: setup onItemAdded and onItemRemoved and subscribe to them here, to make them update the UI when new items are added or removed
-    }
-
     private fun onSelectionChanged(oldIndex: Int, newIndex: Int) {
         val oldSlot = slots[oldIndex]
         val currentSlot = slots[newIndex]

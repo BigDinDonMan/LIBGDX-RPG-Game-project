@@ -11,15 +11,13 @@ import com.badlogic.gdx.physics.box2d.PolygonShape
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.utils.viewport.StretchViewport
-import com.rpgproject.ecs.components.PlayerComponent
-import com.rpgproject.ecs.components.RigidBodyComponent
-import com.rpgproject.ecs.components.TextureComponent
-import com.rpgproject.ecs.components.TransformComponent
+import com.rpgproject.ecs.components.*
 import com.rpgproject.ecs.systems.InteractionSystem
 import com.rpgproject.input.GamePadHandler
 import com.rpgproject.input.GamePadUIHandler
 import com.rpgproject.input.KeyboardHandler
 import com.rpgproject.input.KeyboardUIHandler
+import com.rpgproject.inventory.InventoryItem
 import com.rpgproject.ui.AnimatedCountdownLabel
 import com.rpgproject.ui.InventoryWindow
 import com.rpgproject.util.EcsWorld
@@ -31,6 +29,7 @@ import com.rpgproject.util.widthF
 import ktx.app.KtxScreen
 import net.mostlyoriginal.api.event.common.EventSystem
 import kotlin.properties.Delegates
+import kotlin.random.Random
 
 class GameScreen(private val ecsWorld: EcsWorld, private val physicsWorld: PhysicsWorld, private val eventSystem: EventSystem, private val camera: Camera) : KtxScreen {
 
@@ -44,6 +43,8 @@ class GameScreen(private val ecsWorld: EcsWorld, private val physicsWorld: Physi
     private val keyboardUIHandler = KeyboardUIHandler(stage)
 
     private val testTexture = Texture(Gdx.files.internal("arrow.png"))
+    private val potionTexture = Texture(Gdx.files.internal("potion.jpg"))
+    private val stickTexture = Texture(Gdx.files.internal("stick.png"))
     private var testEntity by Delegates.notNull<Int>()
     private val testTransform = TransformComponent();
     private var player by Delegates.notNull<Int>()
@@ -90,6 +91,19 @@ class GameScreen(private val ecsWorld: EcsWorld, private val physicsWorld: Physi
             position.set(50f, 50f, 0f)
             size.set(testTexture.width.toFloat(), testTexture.height.toFloat(), 0f)
         }).add(TextureComponent().apply { texture = testTexture })
+
+        val potionEntity = ecsWorld.create()
+        val stickEntity = ecsWorld.create()
+        ecsWorld.edit(potionEntity).add(TransformComponent().apply {
+            position.set(-50f, -50f, -50f)
+            size.set(potionTexture.width.toFloat(), potionTexture.height.toFloat(), 0f)
+        }).
+        add(TextureComponent().apply { texture = potionTexture }).
+        add(InteractableComponent().apply { interactableType = InteractableComponent.InteractableObjectType.PICKUP }).
+        add(InventoryItemComponent().apply {
+            item = InventoryItem("Health potion", "Heals 100 HP", potionTexture, 3)
+            amount = Random.nextInt(5, 15)
+        })
     }
 
     override fun dispose() {
@@ -113,6 +127,10 @@ class GameScreen(private val ecsWorld: EcsWorld, private val physicsWorld: Physi
                 Gdx.graphics.widthF() / 2 - inventoryWindow.width / 2,
                 Gdx.graphics.heightF() / 2 - inventoryWindow.height / 2)
         inventoryWindow.isVisible = false
+
+        //todo: add listener functions here that update specific index in inventory
+//        Inventory.onItemAdded += ;
+//        Inventory.onItemRemoved += ;
 
         stage.addActor(moneyDisplay)
         moneyDisplay.setPosition(25f, Gdx.graphics.heightF() - 25f)
