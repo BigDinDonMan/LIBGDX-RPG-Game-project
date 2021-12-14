@@ -27,7 +27,7 @@ object Inventory {
                 break
             }
             val current = items[index]
-            if (current != null && current.first == item && current.second < item.maxStack) {
+            if (current != null && current.first == item/* && current.second < item.maxStack*/) {
                 val stackCount = current.second
                 var newSize = count + stackCount
                 val remainder = newSize % current.first.maxStack
@@ -64,8 +64,8 @@ object Inventory {
                     currentCount -= current.second
                     subtractedFromSlot = current.second
                 } else {
-                    currentCount = 0
                     subtractedFromSlot = current.second - currentCount
+                    currentCount = 0
                 }
                 slotsWithItem += Pair(index, subtractedFromSlot)
             }

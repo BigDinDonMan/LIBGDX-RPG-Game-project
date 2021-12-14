@@ -49,6 +49,7 @@ class GameScreen(private val ecsWorld: EcsWorld, private val physicsWorld: Physi
     private val testTransform = TransformComponent();
     private var player by Delegates.notNull<Int>()
     lateinit var playerTransform: TransformComponent
+    val testItem =InventoryItem("Health potion", "Heals 100 HP", potionTexture, 3)
 
     init {
         setupUI()
@@ -102,7 +103,7 @@ class GameScreen(private val ecsWorld: EcsWorld, private val physicsWorld: Physi
         add(TextureComponent().apply { texture = potionTexture }).
         add(InteractableComponent().apply { interactableType = InteractableComponent.InteractableObjectType.PICKUP }).
         add(InventoryItemComponent().apply {
-            item = InventoryItem("Health potion", "Heals 100 HP", potionTexture, 3)
+            item = testItem
             amount = potionCount
         })
     }
@@ -114,6 +115,9 @@ class GameScreen(private val ecsWorld: EcsWorld, private val physicsWorld: Physi
     override fun render(delta: Float) {
         stage.update(delta)
         ecsWorld.setDelta(delta).apply { ecsWorld.process() }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+            Inventory.removeItem(testItem, 7)
+        }
         RemovalService.process()
     }
 
