@@ -17,6 +17,7 @@ import com.rpgproject.input.GamePadHandler
 import com.rpgproject.input.GamePadUIHandler
 import com.rpgproject.input.KeyboardHandler
 import com.rpgproject.input.KeyboardUIHandler
+import com.rpgproject.inventory.Inventory
 import com.rpgproject.inventory.InventoryItem
 import com.rpgproject.ui.AnimatedCountdownLabel
 import com.rpgproject.ui.InventoryWindow
@@ -129,8 +130,8 @@ class GameScreen(private val ecsWorld: EcsWorld, private val physicsWorld: Physi
         inventoryWindow.isVisible = false
 
         //todo: add listener functions here that update specific index in inventory
-//        Inventory.onItemAdded += ;
-//        Inventory.onItemRemoved += ;
+        Inventory.onItemAdded += { _, position, _ -> inventoryWindow.slots[position].updateDisplay() }
+        Inventory.onItemRemoved += { _, position, _ -> inventoryWindow.slots[position].updateDisplay() }
 
         stage.addActor(moneyDisplay)
         moneyDisplay.setPosition(25f, Gdx.graphics.heightF() - 25f)

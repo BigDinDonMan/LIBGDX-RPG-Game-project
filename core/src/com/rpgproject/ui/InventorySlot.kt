@@ -1,5 +1,6 @@
 package com.rpgproject.ui
 
+import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton
@@ -31,7 +32,11 @@ class InventorySlot(slotSkin: Skin?, val inventoryIndex: Int) : ImageButton(slot
     fun updateDisplay() {
         val itemData = Inventory.itemAt(inventoryIndex)
         itemIcon.drawable = if (itemData == null) null else TextureRegionDrawable(itemData.first.icon)
-        //todo: only set the text to count if count is more than 1
-        itemAmountLabel.setText(itemData?.second?.toString() ?: "")
+        itemAmountLabel.setText(if (itemData == null) "" else if (itemData.second > 1) itemData.second.toString() else "")
+    }
+
+    override fun draw(batch: Batch, parentAlpha: Float) {
+        super.draw(batch, parentAlpha)
+        itemIcon.drawable?.draw(batch, x, y, width, height)
     }
 }
