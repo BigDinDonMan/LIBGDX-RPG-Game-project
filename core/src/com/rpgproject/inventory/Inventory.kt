@@ -80,4 +80,16 @@ object Inventory {
 
     fun itemAt(position: Int) = items[position]
     //</editor-fold>
+
+    fun reset() {
+        for (i in items.indices) {
+            val item = items[i]
+            if (item != null) {
+
+            }
+        }
+
+        onItemAdded.clearListeners()
+        onItemRemoved.clearListeners()
+    }
 }

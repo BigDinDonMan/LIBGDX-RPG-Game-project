@@ -1,6 +1,6 @@
 package com.rpgproject.util.observer
 
-class GameActionEvent {
+class GameActionEvent : Subscribable {
     private val subscriptions = mutableListOf<() -> Unit>()
 
     operator fun plusAssign(func: () -> Unit) {
@@ -13,5 +13,9 @@ class GameActionEvent {
 
     operator fun invoke() {
         subscriptions.forEach { it.invoke() }
+    }
+
+    override fun clearListeners() {
+        subscriptions.clear()
     }
 }
