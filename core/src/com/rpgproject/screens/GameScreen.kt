@@ -30,7 +30,6 @@ import com.rpgproject.util.widthF
 import ktx.app.KtxScreen
 import net.mostlyoriginal.api.event.common.EventSystem
 import kotlin.properties.Delegates
-import kotlin.random.Random
 
 class GameScreen(private val ecsWorld: EcsWorld, private val physicsWorld: PhysicsWorld, private val eventSystem: EventSystem, private val camera: Camera) : KtxScreen {
 
@@ -95,6 +94,7 @@ class GameScreen(private val ecsWorld: EcsWorld, private val physicsWorld: Physi
 
         val potionEntity = ecsWorld.create()
         val stickEntity = ecsWorld.create()
+        val potionCount = 14
         ecsWorld.edit(potionEntity).add(TransformComponent().apply {
             position.set(-50f, -50f, -50f)
             size.set(potionTexture.width.toFloat(), potionTexture.height.toFloat(), 0f)
@@ -103,7 +103,7 @@ class GameScreen(private val ecsWorld: EcsWorld, private val physicsWorld: Physi
         add(InteractableComponent().apply { interactableType = InteractableComponent.InteractableObjectType.PICKUP }).
         add(InventoryItemComponent().apply {
             item = InventoryItem("Health potion", "Heals 100 HP", potionTexture, 3)
-            amount = Random.nextInt(5, 15)
+            amount = potionCount
         })
     }
 
