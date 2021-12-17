@@ -30,6 +30,10 @@ import ktx.app.clearScreen
 import net.mostlyoriginal.api.event.common.EventSystem
 import kotlin.system.exitProcess
 
+//todo: if implementing skill effect system: add a map with cached functions for each skill
+//todo: each skill should have its corresponding static method in a class that will be fetched using reflection
+// and then cached in that map
+//todo: ui gamepad handler will probably have to be instantiated here to allow starting the game using a game controller
 class RPGProjectGame : KtxGame<Screen>() {
 
     private lateinit var batch: SpriteBatch

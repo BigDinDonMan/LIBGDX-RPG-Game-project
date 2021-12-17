@@ -106,6 +106,17 @@ class GameScreen(private val ecsWorld: EcsWorld, private val physicsWorld: Physi
             item = testItem
             amount = potionCount
         })
+        val anotherPotionEntity = ecsWorld.create()
+        ecsWorld.edit(anotherPotionEntity).add(TransformComponent().apply {
+            position.set(-150f, -150f, -150f)
+            size.set(potionTexture.width.toFloat(), potionTexture.height.toFloat(), 0f)
+        }).
+        add(TextureComponent().apply { texture = potionTexture }).
+        add(InteractableComponent().apply { interactableType = InteractableComponent.InteractableObjectType.PICKUP }).
+        add(InventoryItemComponent().apply {
+            amount = potionCount
+            item = testItem
+        })
     }
 
     override fun dispose() {

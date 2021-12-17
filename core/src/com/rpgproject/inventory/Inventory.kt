@@ -27,14 +27,15 @@ object Inventory {
                 break
             }
             val current = items[index]
-            if (current != null && current.first == item/* && current.second < item.maxStack*/) {
+            if (current != null && current.first == item && current.second < item.maxStack) {
                 val stackCount = current.second
                 var newSize = count + stackCount
-                val remainder = newSize % current.first.maxStack
-                newSize -= remainder
+                if (newSize > item.maxStack) {
+                    currentCount -= (item.maxStack - stackCount)
+                    newSize = item.maxStack
+                }
                 items[index] = Pair(current.first, newSize)
                 onItemAdded.invoke(item, index, newSize)
-                currentCount = remainder
             } else if (current == null) {
                 var addedCount: Int
                 if (item.maxStack < currentCount) {
