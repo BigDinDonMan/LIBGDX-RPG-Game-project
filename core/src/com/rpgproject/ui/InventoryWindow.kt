@@ -13,6 +13,7 @@ import com.rpgproject.util.ui.simulateClick
 //this class will subscribe to Inventory.itemAdded and Inventory.itemRemoved component to properly update the ui
 class InventoryWindow : Window, UIController {
 
+    //todo: clear selection on closing the window
     val slots = ArrayList<InventorySlot>()
     private val slotsTable = Table()
     private var slotsPerRow = 8

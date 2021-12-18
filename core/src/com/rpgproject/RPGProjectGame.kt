@@ -34,6 +34,7 @@ import kotlin.system.exitProcess
 //todo: each skill should have its corresponding static method in a class that will be fetched using reflection
 // and then cached in that map
 //todo: ui gamepad handler will probably have to be instantiated here to allow starting the game using a game controller
+//todo: add ItemInformationDisplay Actor that will be updated on inventory slot selection
 class RPGProjectGame : KtxGame<Screen>() {
 
     private lateinit var batch: SpriteBatch
