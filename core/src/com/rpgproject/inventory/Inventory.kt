@@ -66,7 +66,7 @@ object Inventory {
                     currentCount -= current.amount
                     subtractedFromSlot = current.amount
                 } else {
-                    subtractedFromSlot = current.amount - currentCount
+                    subtractedFromSlot = currentCount
                     currentCount = 0
                 }
                 slotsWithItem += Pair(index, subtractedFromSlot)
@@ -81,6 +81,7 @@ object Inventory {
             val currentItem = items[slotIndex]
             val currentItemCount = currentItem.amount - subtractedCount
             currentItem.item = if (currentItemCount <= 0) null else currentItem.item
+            currentItem.amount = currentItemCount
             onItemRemoved.invoke(currentItem.item, slotIndex, currentItemCount)
         } }
 
@@ -92,11 +93,11 @@ object Inventory {
 
     fun reset() {
         for (i in items.indices) {
-            val item = items[i]
-            if (item != null) {
-
-            }
+            items[i].item = null
+            items[i].amount = 0
         }
+
+        currency = 0
 
         onItemAdded.clearListeners()
         onItemRemoved.clearListeners()

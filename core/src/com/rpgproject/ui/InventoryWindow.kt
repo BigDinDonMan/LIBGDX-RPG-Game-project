@@ -90,8 +90,11 @@ class InventoryWindow : Window, UIController {
         onSelectionChanged(oldIndex, currentSlotIndex)
     }
 
+    //this is a temporary function to check whether it correctly removes items from inventory
     fun dropItem() {
-
+        val itemData = Inventory.itemAt(currentSlot().inventoryIndex)
+        Inventory.removeItem(itemData.item!!, 5)
+        slots.forEach { it.updateDisplay() }
     }
 
     override fun handleKeyboardKey(keyCode: Int): Boolean {
