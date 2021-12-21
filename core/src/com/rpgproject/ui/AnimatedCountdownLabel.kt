@@ -47,4 +47,8 @@ class AnimatedCountdownLabel(val prefix: String, startingValue: Int): Actor() {
 
         increasePerTick = perTick * direction
     }
+
+    fun startCountdown(from: Int, to: Int) {
+        startCountdown(to - from)
+    }
 }

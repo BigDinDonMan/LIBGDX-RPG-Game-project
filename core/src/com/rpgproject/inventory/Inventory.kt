@@ -1,5 +1,6 @@
 package com.rpgproject.inventory
 
+import com.rpgproject.util.observer.DoubleArgGameEvent
 import com.rpgproject.util.observer.TripleArgGameEvent
 
 //maybe add onItemChanged callback?
@@ -16,6 +17,7 @@ object Inventory {
     val onArtifactEquipped: Any? = null //this is going to be a callback once implemented
     val onItemAdded = TripleArgGameEvent<InventoryItem?, Int, Int>() //item, position in inventory, current count
     val onItemRemoved = TripleArgGameEvent<InventoryItem?, Int, Int>() //ditto
+    val onCurrencyChanged = DoubleArgGameEvent<Int, Int>()
 
     //</editor-fold>
 
@@ -101,5 +103,11 @@ object Inventory {
 
         onItemAdded.clearListeners()
         onItemRemoved.clearListeners()
+    }
+
+    fun changeCurrency(by: Int) {
+        val oldCurrency = currency
+        currency += by
+        onCurrencyChanged.invoke(oldCurrency, currency)
     }
 }

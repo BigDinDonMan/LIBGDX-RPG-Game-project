@@ -2,13 +2,13 @@ package com.rpgproject.ui.inventory
 
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.scenes.scene2d.ui.Image
-import com.badlogic.gdx.scenes.scene2d.ui.Label
-import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.rpgproject.ui.AnimatedCountdownLabel
 
-class CurrencyDisplay(currencyIcon: Texture, labelSkin: Skin) : Table() {
+class CurrencyDisplay(currencyIcon: Texture) : Table() {
     private val currencyIconImage = Image(currencyIcon)
-    private val currencyLabel = Label("", labelSkin)
+    //todo: add animated countdown label here
+    private val currencyLabel = AnimatedCountdownLabel("", 0)
 
     init {
         row()
@@ -16,7 +16,7 @@ class CurrencyDisplay(currencyIcon: Texture, labelSkin: Skin) : Table() {
         add(currencyLabel).padLeft(5f)
     }
 
-    fun update(currency: Int) {
-        currencyLabel.setText(currency)
+    fun update(old: Int, current: Int) {
+        currencyLabel.startCountdown(old, current)
     }
 }

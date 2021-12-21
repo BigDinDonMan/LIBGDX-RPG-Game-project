@@ -3,6 +3,7 @@ package com.rpgproject.ui.inventory
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.controllers.Controller
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.Window
@@ -46,8 +47,8 @@ class InventoryWindow : Window, UIController {
             }
         }
         slots[0].color = selectionColor
-//        add()
-        //todo: add currency display
+        val currencyDisplay = CurrencyDisplay(Texture(""))
+        Inventory.onCurrencyChanged += currencyDisplay::update
     }
 
     private fun onSelectionChanged(oldIndex: Int, newIndex: Int) {
