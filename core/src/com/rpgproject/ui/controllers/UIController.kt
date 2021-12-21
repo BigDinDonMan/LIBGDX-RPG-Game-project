@@ -1,4 +1,4 @@
-package com.rpgproject.ui
+package com.rpgproject.ui.controllers
 
 import com.badlogic.gdx.controllers.Controller
 

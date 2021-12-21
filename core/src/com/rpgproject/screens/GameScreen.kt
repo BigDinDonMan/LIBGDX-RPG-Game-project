@@ -20,13 +20,11 @@ import com.rpgproject.input.KeyboardUIHandler
 import com.rpgproject.inventory.Inventory
 import com.rpgproject.inventory.InventoryItem
 import com.rpgproject.ui.AnimatedCountdownLabel
-import com.rpgproject.ui.InventoryWindow
-import com.rpgproject.util.EcsWorld
-import com.rpgproject.util.PhysicsWorld
+import com.rpgproject.ui.inventory.InventoryWindow
+import com.rpgproject.util.*
+import com.rpgproject.util.assets.ShaderStorage
 import com.rpgproject.util.ecs.RemovalService
-import com.rpgproject.util.heightF
 import com.rpgproject.util.ui.update
-import com.rpgproject.util.widthF
 import ktx.app.KtxScreen
 import net.mostlyoriginal.api.event.common.EventSystem
 import kotlin.properties.Delegates
@@ -116,6 +114,10 @@ class GameScreen(private val ecsWorld: EcsWorld, private val physicsWorld: Physi
         add(InventoryItemComponent().apply {
             amount = potionCount
             item = testItem
+        }).
+        add(ShaderComponent().apply {
+            shader = ShaderStorage["Outline"]
+            shaderParams.get(GLType.VEC3)!!.put("outlineColor", floatArrayOf(1f, 0f, 0f).toTypedArray())
         })
     }
 
@@ -126,9 +128,6 @@ class GameScreen(private val ecsWorld: EcsWorld, private val physicsWorld: Physi
     override fun render(delta: Float) {
         stage.update(delta)
         ecsWorld.setDelta(delta).apply { ecsWorld.process() }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-            Inventory.removeItem(testItem, 7)
-        }
         RemovalService.process()
     }
 

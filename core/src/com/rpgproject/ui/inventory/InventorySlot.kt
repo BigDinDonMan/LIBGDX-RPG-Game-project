@@ -1,4 +1,4 @@
-package com.rpgproject.ui
+package com.rpgproject.ui.inventory
 
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.scenes.scene2d.InputEvent
@@ -10,10 +10,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.rpgproject.inventory.Inventory
 
-class InventorySlot(slotSkin: Skin?, val inventoryIndex: Int) : ImageButton(slotSkin) {//todo: add Image field for displaying item icon
+class InventorySlot(slotSkin: Skin?, val inventoryIndex: Int) : ImageButton(slotSkin) {
 
     private val itemIcon = Image()
-    private val itemAmountLabel = Label("TEMP", slotSkin)
+    private val itemAmountLabel = Label("", slotSkin)
 
     init {
         addListener(object : ClickListener() {
@@ -26,7 +26,7 @@ class InventorySlot(slotSkin: Skin?, val inventoryIndex: Int) : ImageButton(slot
     }
 
     private fun selectSlot() {
-        println("${Inventory.itemAt(inventoryIndex)}, ${inventoryIndex}")
+        //todo: this function should be used for using the item (send use event)
     }
 
     fun updateDisplay() {

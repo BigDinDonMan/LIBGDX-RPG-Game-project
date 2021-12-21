@@ -6,7 +6,7 @@ import com.badlogic.gdx.controllers.Controllers
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.ObjectMap
-import com.rpgproject.ui.UIActorToggleable
+import com.rpgproject.ui.controllers.UIActorToggleable
 
 //same in keyboard ui handler
 //todo: add handleKey and handleButton methods in IFocusable (or add another interface) with signature like fun(keyCode: Input.Keys): Unit (or boolean?) and fun (buttonCode: Int)

@@ -13,6 +13,7 @@ object ShaderStorage {
     }
 
     private fun loadShaders() {
+        //@NOTE: this shader wont work if there are pixels with transparency inside the texture
         shadersMap.put(
                 "Outline",
                 ShaderProgram(

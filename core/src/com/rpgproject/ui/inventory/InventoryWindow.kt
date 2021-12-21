@@ -1,4 +1,4 @@
-package com.rpgproject.ui
+package com.rpgproject.ui.inventory
 
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.controllers.Controller
@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.Window
 import com.badlogic.gdx.utils.Align
 import com.rpgproject.inventory.Inventory
+import com.rpgproject.ui.controllers.UIController
 import com.rpgproject.util.ui.simulateClick
 
 //this class will subscribe to Inventory.itemAdded and Inventory.itemRemoved component to properly update the ui
@@ -21,6 +22,7 @@ class InventoryWindow : Window, UIController {
     private var currentSlotIndex = 0
     private val defaultColor = Color(51f,51f,51f,255f)
     private val selectionColor = Color.YELLOW
+//    private val currencyDisplay = CurrencyDisplay()
 
     constructor(title: String, style: WindowStyle) : super(title, style) {
         initUI()
@@ -44,6 +46,8 @@ class InventoryWindow : Window, UIController {
             }
         }
         slots[0].color = selectionColor
+//        add()
+        //todo: add currency display
     }
 
     private fun onSelectionChanged(oldIndex: Int, newIndex: Int) {

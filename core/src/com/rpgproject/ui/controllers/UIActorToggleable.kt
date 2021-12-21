@@ -1,4 +1,4 @@
-package com.rpgproject.ui
+package com.rpgproject.ui.controllers
 
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.Stage
