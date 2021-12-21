@@ -31,8 +31,8 @@ class InventorySlot(slotSkin: Skin?, val inventoryIndex: Int) : ImageButton(slot
 
     fun updateDisplay() {
         val itemData = Inventory.itemAt(inventoryIndex)
-        itemIcon.drawable = if (itemData == null) null else TextureRegionDrawable(itemData.first.icon)
-        itemAmountLabel.setText(if (itemData == null) "" else if (itemData.second > 1) itemData.second.toString() else "")
+        itemIcon.drawable = if (itemData.item == null) null else TextureRegionDrawable(itemData.item!!.icon)
+        itemAmountLabel.setText(if (itemData.item == null) "" else if (itemData.amount > 1) itemData.amount.toString() else "")
     }
 
     override fun draw(batch: Batch, parentAlpha: Float) {

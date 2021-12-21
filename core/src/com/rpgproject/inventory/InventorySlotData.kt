@@ -1,3 +1,3 @@
 package com.rpgproject.inventory
 
-data class InventorySlotData(val item: InventoryItem, val amount: Int)
+data class InventorySlotData(var item: InventoryItem? = null, var amount: Int = 0)

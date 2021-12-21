@@ -14,6 +14,7 @@ import com.rpgproject.util.ui.simulateClick
 class InventoryWindow : Window, UIController {
 
     //todo: clear selection on closing the window
+    //todo: add mouseOver and mouseExit event listeners that will select slot on mouse over and de-select it (maybe?) on mouse exit
     val slots = ArrayList<InventorySlot>()
     private val slotsTable = Table()
     private var slotsPerRow = 8
@@ -89,6 +90,10 @@ class InventoryWindow : Window, UIController {
         onSelectionChanged(oldIndex, currentSlotIndex)
     }
 
+    fun dropItem() {
+
+    }
+
     override fun handleKeyboardKey(keyCode: Int): Boolean {
         if (!isVisible) return false
 
@@ -100,6 +105,7 @@ class InventoryWindow : Window, UIController {
             Input.Keys.UP -> moveUp()
             Input.Keys.DOWN -> moveDown()
             Input.Keys.ENTER -> currentSlot().simulateClick()
+            Input.Keys.R -> dropItem()
             else -> handled = false
         }
 
