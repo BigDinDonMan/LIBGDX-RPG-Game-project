@@ -23,17 +23,16 @@ class InventoryWindow : Window, UIController {
     private var currentSlotIndex = 0
     private val defaultColor = Color(51f,51f,51f,255f)
     private val selectionColor = Color.YELLOW
-//    private val currencyDisplay = CurrencyDisplay()
 
-    constructor(title: String, style: WindowStyle) : super(title, style) {
-        initUI()
+    constructor(title: String, style: WindowStyle, currencyIcon: Texture) : super(title, style) {
+        initUI(currencyIcon)
     }
 
-    constructor(title: String, skin: Skin) : super(title, skin) {
-        initUI()
+    constructor(title: String, skin: Skin, currencyIcon: Texture) : super(title, skin) {
+        initUI(currencyIcon)
     }
 
-    private fun initUI() {
+    private fun initUI(currencyIcon: Texture) {
         val rows = Inventory.items.size / slotsPerRow
         this.align(Align.bottomLeft)
         add(slotsTable).bottom().left()
@@ -47,8 +46,8 @@ class InventoryWindow : Window, UIController {
             }
         }
         slots[0].color = selectionColor
-        val currencyDisplay = CurrencyDisplay(Texture(""))
-        Inventory.onCurrencyChanged += currencyDisplay::update
+//        val currencyDisplay = CurrencyDisplay(currencyIcon)
+//        Inventory.onCurrencyChanged += currencyDisplay::update
     }
 
     private fun onSelectionChanged(oldIndex: Int, newIndex: Int) {

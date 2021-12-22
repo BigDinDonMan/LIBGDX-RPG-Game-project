@@ -8,25 +8,27 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
+import com.badlogic.gdx.utils.Align
 import com.rpgproject.inventory.Inventory
 
 class InventorySlot(slotSkin: Skin?, val inventoryIndex: Int) : ImageButton(slotSkin) {
 
     private val itemIcon = Image()
-    private val itemAmountLabel = Label("", slotSkin)
+    //@note: TEMP is needed because without it, the label isnt drawn properly (it sticks out at the bottom)
+    //this is probably due to an empty string not having width and height.
+    private val itemAmountLabel = Label("TEMP", slotSkin)
 
     init {
+        //todo: create onSlotClicked event and call it inside this clickListener (or think about some other solution)
         addListener(object : ClickListener() {
             override fun clicked(event: InputEvent, x: Float, y: Float) {
-                selectSlot()
+
             }
         })
         addActor(itemIcon)
         addActor(itemAmountLabel)
-    }
-
-    private fun selectSlot() {
-        //todo: this function should be used for using the item (send use event)
+        align(Align.bottomLeft)
+        itemAmountLabel.setText("")
     }
 
     fun updateDisplay() {

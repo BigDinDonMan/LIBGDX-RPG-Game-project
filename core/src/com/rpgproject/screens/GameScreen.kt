@@ -3,6 +3,7 @@ package com.rpgproject.screens
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.InputMultiplexer
+import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.Camera
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.physics.box2d.BodyDef
@@ -29,11 +30,11 @@ import ktx.app.KtxScreen
 import net.mostlyoriginal.api.event.common.EventSystem
 import kotlin.properties.Delegates
 
-class GameScreen(private val ecsWorld: EcsWorld, private val physicsWorld: PhysicsWorld, private val eventSystem: EventSystem, private val camera: Camera) : KtxScreen {
+class GameScreen(private val ecsWorld: EcsWorld, private val physicsWorld: PhysicsWorld, private val eventSystem: EventSystem, private val camera: Camera, private val assetManager: AssetManager) : KtxScreen {
 
     private val viewport = StretchViewport(Gdx.graphics.widthF(), Gdx.graphics.heightF())
     private val stage = Stage(viewport)
-    private val inventoryWindow = InventoryWindow("Inventory", Skin(Gdx.files.internal("skins/uiskin.json")))
+    private val inventoryWindow = InventoryWindow("Inventory", Skin(Gdx.files.internal("skins/uiskin.json")), Texture(Gdx.files.internal("gold-coin.png")))
     private val moneyDisplay = AnimatedCountdownLabel("", 0)
     //this needs to be first; if we return false from buttonDown then it gets passed to the other listener
     private val gamePadUIHandler = GamePadUIHandler(stage)
@@ -143,7 +144,6 @@ class GameScreen(private val ecsWorld: EcsWorld, private val physicsWorld: Physi
                 Gdx.graphics.heightF() / 2 - inventoryWindow.height / 2)
         inventoryWindow.isVisible = false
 
-        //todo: add listener functions here that update specific index in inventory
         Inventory.onItemAdded += { _, position, _ -> inventoryWindow.slots[position].updateDisplay() }
         Inventory.onItemRemoved += { _, position, _ -> inventoryWindow.slots[position].updateDisplay() }
 

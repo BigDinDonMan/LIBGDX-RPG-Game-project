@@ -7,7 +7,6 @@ import com.rpgproject.ui.AnimatedCountdownLabel
 
 class CurrencyDisplay(currencyIcon: Texture) : Table() {
     private val currencyIconImage = Image(currencyIcon)
-    //todo: add animated countdown label here
     private val currencyLabel = AnimatedCountdownLabel("", 0)
 
     init {

@@ -66,7 +66,7 @@ class RPGProjectGame : KtxGame<Screen>() {
 
         addScreen(LoadingScreen(assetManager))
         addScreen(MainMenuScreen(mainCamera))
-        addScreen(GameScreen(ecsWorld, physicsWorld, eventBus, mainCamera))
+        addScreen(GameScreen(ecsWorld, physicsWorld, eventBus, mainCamera, assetManager))
         setScreen<GameScreen>() //temporarily, for testing purposes
     }
 
