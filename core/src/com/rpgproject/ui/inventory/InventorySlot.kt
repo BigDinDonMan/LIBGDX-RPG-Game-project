@@ -10,8 +10,12 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.badlogic.gdx.utils.Align
 import com.rpgproject.inventory.Inventory
+import com.rpgproject.inventory.InventoryItem
+import com.rpgproject.util.observer.GameEvent
 
 class InventorySlot(slotSkin: Skin?, val inventoryIndex: Int) : ImageButton(slotSkin) {
+
+    val onSlotClicked = GameEvent<InventoryItem?>()
 
     private val itemIcon = Image()
     //@note: TEMP is needed because without it, the label isnt drawn properly (it sticks out at the bottom)
@@ -22,7 +26,7 @@ class InventorySlot(slotSkin: Skin?, val inventoryIndex: Int) : ImageButton(slot
         //todo: create onSlotClicked event and call it inside this clickListener (or think about some other solution)
         addListener(object : ClickListener() {
             override fun clicked(event: InputEvent, x: Float, y: Float) {
-
+                onSlotClicked.invoke(Inventory.itemAt(inventoryIndex).item)
             }
         })
         addActor(itemIcon)

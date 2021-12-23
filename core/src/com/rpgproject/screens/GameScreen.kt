@@ -106,6 +106,7 @@ class GameScreen(private val ecsWorld: EcsWorld, private val physicsWorld: Physi
             amount = potionCount
         })
         val anotherPotionEntity = ecsWorld.create()
+        //todo: add prefabs to avoid this kind of shit...
         ecsWorld.edit(anotherPotionEntity).add(TransformComponent().apply {
             position.set(-150f, -150f, -150f)
             size.set(potionTexture.width.toFloat(), potionTexture.height.toFloat(), 0f)
@@ -118,7 +119,7 @@ class GameScreen(private val ecsWorld: EcsWorld, private val physicsWorld: Physi
         }).
         add(ShaderComponent().apply {
             shader = ShaderStorage["Outline"]
-            shaderParams.get(GLType.VEC3)!!.put("outlineColor", floatArrayOf(1f, 0f, 0f).toTypedArray())
+            shaderParams[GLType.VEC3]!!.put("outlineColor", arrayOf(1f, 0f, 0f))
         })
     }
 
