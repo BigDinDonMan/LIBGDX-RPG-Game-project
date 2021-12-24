@@ -86,11 +86,11 @@ class GameScreen(private val ecsWorld: EcsWorld, private val physicsWorld: Physi
         )
         gamePadHandler.injectPlayerEntity(ecsWorld.getEntity(playerEntity))
 
-        testEntity = ecsWorld.create()
-        ecsWorld.edit(testEntity).add(testTransform.apply {
-            position.set(50f, 50f, 0f)
-            size.set(testTexture.width.toFloat(), testTexture.height.toFloat(), 0f)
-        }).add(TextureComponent().apply { texture = testTexture })
+//        testEntity = ecsWorld.create()
+//        ecsWorld.edit(testEntity).add(testTransform.apply {
+//            position.set(50f, 50f, 0f)
+//            size.set(testTexture.width.toFloat(), testTexture.height.toFloat(), 0f)
+//        }).add(TextureComponent().apply { texture = testTexture })
 
         val potionEntity = ecsWorld.create()
         val stickEntity = ecsWorld.create()
@@ -121,6 +121,16 @@ class GameScreen(private val ecsWorld: EcsWorld, private val physicsWorld: Physi
             shader = ShaderStorage["Outline"]
             shaderParams[GLType.VEC3]!!.put("outlineColor", arrayOf(1f, 0f, 0f))
         })
+
+        ecsWorld.edit(stickEntity).add(TransformComponent().apply {
+            position.set(-150f, -150f, 0f)
+            size.set(stickTexture.width.toFloat(), stickTexture.height.toFloat(), 0f)
+        }).add(TextureComponent().apply { texture = stickTexture })
+            .add(InteractableComponent().apply { interactableType = InteractableComponent.InteractableObjectType.PICKUP }).
+            add(InventoryItemComponent().apply {
+                amount = 20
+                item = InventoryItem("Stick", "Wooden stick. Plain and simple.", stickTexture, 30)
+            })
     }
 
     override fun dispose() {

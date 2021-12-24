@@ -4,9 +4,11 @@ import com.badlogic.gdx.Input
 import com.badlogic.gdx.controllers.Controller
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.Window
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.Align
 import com.rpgproject.inventory.Inventory
 import com.rpgproject.ui.controllers.UIController
@@ -14,7 +16,7 @@ import com.rpgproject.util.ui.simulateClick
 
 //this class will subscribe to Inventory.itemAdded and Inventory.itemRemoved component to properly update the ui
 class InventoryWindow : Window, UIController {
-
+    //todo: add a function to handle swapping/moving items in inventory
     //todo: clear selection on closing the window
     //todo: add mouseOver and mouseExit event listeners that will select slot on mouse over and de-select it (maybe?) on mouse exit
     val slots = ArrayList<InventorySlot>()
@@ -22,7 +24,10 @@ class InventoryWindow : Window, UIController {
     private var slotsPerRow = 8
     private var currentSlotIndex = 0
     private val defaultColor = Color(51f,51f,51f,255f)
-    private val selectionColor = Color.YELLOW
+    private val highlightColor = Color.YELLOW
+    private val selectColor = Color.RED
+    private var currentlySelected: InventorySlot? = null
+    private var currentlyHighlighted: InventorySlot? = null
 
     constructor(title: String, style: WindowStyle, currencyIcon: Texture) : super(title, style) {
         initUI(currencyIcon)
@@ -43,9 +48,46 @@ class InventoryWindow : Window, UIController {
                 val slot = InventorySlot(skin, index++)
                 slots += slot
                 slotsTable.add(slot).prefSize(75f, 75f).pad(5f)
+                slot.addListener(object : ClickListener() {
+                    override fun clicked(event: InputEvent, x: Float, y: Float) {
+                        if (currentlySelected == null) {
+                            currentlySelected = slot
+                            slot.color = selectColor
+                        } else {
+                            if (slot === currentlySelected) {
+                                currentlySelected = null
+                                slot.color = defaultColor
+                                return
+                            }
+
+                            val slotData1 = Inventory.itemAt(slot.inventoryIndex)
+                            val slotData2 = Inventory.itemAt(currentlySelected!!.inventoryIndex)
+
+                            if (slotData1.item == slotData2.item) {
+                                //todo: handle item stacking here
+                            } else {
+                                val oldItem = slotData1.item
+                                val oldAmount = slotData1.amount
+                                slotData1.item = slotData2.item
+                                slotData1.amount = slotData2.amount
+                                slotData2.item = oldItem
+                                slotData2.amount = oldAmount
+                                slot.updateDisplay()
+                                currentlySelected?.updateDisplay()
+                                currentlySelected?.color = defaultColor
+                                currentlySelected = null
+                            }
+
+
+                            //if null then move currently selected into the currently highlighted slot
+                                //else swap their places if the items are different
+                                //or try stacking them if they are the same
+                        }
+                    }
+                })
             }
         }
-        slots[0].color = selectionColor
+        slots[0].color = highlightColor
 //        val currencyDisplay = CurrencyDisplay(currencyIcon)
 //        Inventory.onCurrencyChanged += currencyDisplay::update
     }
@@ -54,8 +96,10 @@ class InventoryWindow : Window, UIController {
         val oldSlot = slots[oldIndex]
         val currentSlot = slots[newIndex]
 
-        oldSlot.color = defaultColor
-        currentSlot.color = selectionColor
+        //FIXME: selection color is being cleared on highlight change. dont change the color when previous one is selected
+        oldSlot.color = if (oldSlot === currentlySelected) selectColor else defaultColor
+        currentSlot.color = highlightColor
+        currentlyHighlighted = currentSlot
     }
 
     fun currentSlot(): InventorySlot = this.slots[currentSlotIndex]

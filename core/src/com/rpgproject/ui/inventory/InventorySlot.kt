@@ -45,4 +45,6 @@ class InventorySlot(slotSkin: Skin?, val inventoryIndex: Int) : ImageButton(slot
         super.draw(batch, parentAlpha)
         itemIcon.drawable?.draw(batch, x, y, width, height)
     }
+
+    fun isEmpty() = Inventory.itemAt(inventoryIndex).item == null
 }
