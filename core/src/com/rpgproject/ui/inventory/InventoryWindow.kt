@@ -63,6 +63,11 @@ class InventoryWindow : Window, UIController {
                             val slotData1 = Inventory.itemAt(slot.inventoryIndex)
                             val slotData2 = Inventory.itemAt(currentlySelected!!.inventoryIndex)
 
+                            if (slotData1.item == null && slotData2.item == null) {
+                                currentlySelected?.color = defaultColor
+                                currentlySelected = null
+                            }
+
                             if (slotData1.item == slotData2.item) {
                                 //todo: handle item stacking here
                             } else {
@@ -77,11 +82,6 @@ class InventoryWindow : Window, UIController {
                                 currentlySelected?.color = defaultColor
                                 currentlySelected = null
                             }
-
-
-                            //if null then move currently selected into the currently highlighted slot
-                                //else swap their places if the items are different
-                                //or try stacking them if they are the same
                         }
                     }
                 })
@@ -92,7 +92,7 @@ class InventoryWindow : Window, UIController {
 //        Inventory.onCurrencyChanged += currencyDisplay::update
     }
 
-    private fun onSelectionChanged(oldIndex: Int, newIndex: Int) {
+    private fun onHighlightChanged(oldIndex: Int, newIndex: Int) {
         val oldSlot = slots[oldIndex]
         val currentSlot = slots[newIndex]
 
@@ -100,6 +100,10 @@ class InventoryWindow : Window, UIController {
         oldSlot.color = if (oldSlot === currentlySelected) selectColor else defaultColor
         currentSlot.color = highlightColor
         currentlyHighlighted = currentSlot
+    }
+
+    private fun onSelectionChanged() {
+
     }
 
     fun currentSlot(): InventorySlot = this.slots[currentSlotIndex]
@@ -110,7 +114,7 @@ class InventoryWindow : Window, UIController {
         if (currentSlotIndex >= Inventory.items.size) {
             currentSlotIndex = 0
         }
-        onSelectionChanged(oldIndex, currentSlotIndex)
+        onHighlightChanged(oldIndex, currentSlotIndex)
     }
 
     fun moveLeft() {
@@ -119,7 +123,7 @@ class InventoryWindow : Window, UIController {
         if (currentSlotIndex < 0) {
             currentSlotIndex = Inventory.items.size - 1
         }
-        onSelectionChanged(oldIndex, currentSlotIndex)
+        onHighlightChanged(oldIndex, currentSlotIndex)
     }
 
     fun moveUp() {
@@ -128,14 +132,14 @@ class InventoryWindow : Window, UIController {
         if (currentSlotIndex < 0) {
             currentSlotIndex += Inventory.items.size
         }
-        onSelectionChanged(oldIndex, currentSlotIndex)
+        onHighlightChanged(oldIndex, currentSlotIndex)
     }
 
     fun moveDown() {
         val oldIndex = currentSlotIndex
         currentSlotIndex += slotsPerRow
         currentSlotIndex %= Inventory.items.size
-        onSelectionChanged(oldIndex, currentSlotIndex)
+        onHighlightChanged(oldIndex, currentSlotIndex)
     }
 
     //this is a temporary function to check whether it correctly removes items from inventory
