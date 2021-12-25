@@ -69,7 +69,17 @@ class InventoryWindow : Window, UIController {
                             }
 
                             if (slotData1.item == slotData2.item) {
-                                //todo: handle item stacking here
+                                val currentAmount = slotData2.amount
+                                val targetAmount = slotData1.amount
+                                val maxStackSize = slotData1.item!!.maxStack
+                                val sum = currentAmount + targetAmount
+                                if (sum > maxStackSize) {
+                                    slotData1.amount = maxStackSize
+                                    slotData2.amount = sum - maxStackSize
+                                } else {
+                                    slotData1.amount = sum
+                                    slotData2.clear()
+                                }
                             } else {
                                 val oldItem = slotData1.item
                                 val oldAmount = slotData1.amount
@@ -77,11 +87,11 @@ class InventoryWindow : Window, UIController {
                                 slotData1.amount = slotData2.amount
                                 slotData2.item = oldItem
                                 slotData2.amount = oldAmount
-                                slot.updateDisplay()
-                                currentlySelected?.updateDisplay()
-                                currentlySelected?.color = defaultColor
-                                currentlySelected = null
                             }
+                            slot.updateDisplay()
+                            currentlySelected?.updateDisplay()
+                            currentlySelected?.color = defaultColor
+                            currentlySelected = null
                         }
                     }
                 })
@@ -96,7 +106,6 @@ class InventoryWindow : Window, UIController {
         val oldSlot = slots[oldIndex]
         val currentSlot = slots[newIndex]
 
-        //FIXME: selection color is being cleared on highlight change. dont change the color when previous one is selected
         oldSlot.color = if (oldSlot === currentlySelected) selectColor else defaultColor
         currentSlot.color = highlightColor
         currentlyHighlighted = currentSlot
@@ -145,8 +154,10 @@ class InventoryWindow : Window, UIController {
     //this is a temporary function to check whether it correctly removes items from inventory
     fun dropItem() {
         val itemData = Inventory.itemAt(currentSlot().inventoryIndex)
-        Inventory.removeItem(itemData.item!!, 5)
-        slots.forEach { it.updateDisplay() }
+        if (itemData.item == null) return
+        itemData.amount -= 1
+        itemData.item = if (itemData.amount <= 0) null else itemData.item
+        currentSlot().updateDisplay()
     }
 
     override fun handleKeyboardKey(keyCode: Int): Boolean {
