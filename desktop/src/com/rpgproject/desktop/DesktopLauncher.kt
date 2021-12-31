@@ -1,9 +1,8 @@
 package com.rpgproject.desktop
 
-import kotlin.jvm.JvmStatic
-import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication
-import com.rpgproject.RPGProjectGame
+import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration
+import com.rpgproject.MythosHunterGame
 
 object DesktopLauncher {
     @JvmStatic
@@ -14,6 +13,6 @@ object DesktopLauncher {
             height = 768
 //            fullscreen = true
         }
-        LwjglApplication(RPGProjectGame(), config)
+        LwjglApplication(MythosHunterGame(), config)
     }
 }

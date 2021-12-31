@@ -35,7 +35,7 @@ import kotlin.system.exitProcess
 // and then cached in that map
 //todo: ui gamepad handler will probably have to be instantiated here to allow starting the game using a game controller
 //todo: add ItemInformationDisplay Actor that will be updated on inventory slot selection
-class RPGProjectGame : KtxGame<Screen>() {
+class MythosHunterGame : KtxGame<Screen>() {
 
     private lateinit var batch: SpriteBatch
     private lateinit var ecsWorld: EcsWorld
@@ -46,7 +46,7 @@ class RPGProjectGame : KtxGame<Screen>() {
     private lateinit var eventBus: EventSystem
 
     companion object {
-        lateinit var Instance: RPGProjectGame
+        lateinit var Instance: MythosHunterGame
     }
 
     override fun create() {
