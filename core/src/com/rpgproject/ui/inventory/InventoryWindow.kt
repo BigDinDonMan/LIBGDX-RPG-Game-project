@@ -51,6 +51,7 @@ class InventoryWindow : Window, UIController {
                 slot.addListener(object : ClickListener() {
                     override fun clicked(event: InputEvent, x: Float, y: Float) {
                         if (currentlySelected == null) {
+                            if (slot.isEmpty()) return
                             currentlySelected = slot
                             slot.color = selectColor
                         } else {

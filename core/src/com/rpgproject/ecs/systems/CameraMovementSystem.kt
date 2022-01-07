@@ -69,7 +69,7 @@ class CameraMovementSystem(val camera: Camera, val cameraSpeed: Float = 0.5f) : 
                 isShaking = false
             }
         } else {
-//            cameraPosition.interpolate(targetPosition, cameraSpeed, Interpolation.smooth2)
+            cameraPosition.interpolate(targetPosition, cameraSpeed, Interpolation.smooth2)
         }
         camera.position.set(cameraPosition)
     }

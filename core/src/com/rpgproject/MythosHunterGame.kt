@@ -65,7 +65,7 @@ class MythosHunterGame : KtxGame<Screen>() {
         loadI18nBundles()
 
         addScreen(LoadingScreen(assetManager))
-        addScreen(MainMenuScreen(mainCamera))
+        addScreen(MainMenuScreen(assetManager))
         addScreen(GameScreen(ecsWorld, physicsWorld, eventBus, mainCamera, assetManager))
         setScreen<GameScreen>() //temporarily, for testing purposes
     }
@@ -81,6 +81,7 @@ class MythosHunterGame : KtxGame<Screen>() {
     }
 
     override fun dispose() {
+        screens.values().forEach { it.dispose() }
         batch.dispose()
         ecsWorld.dispose()
         physicsWorld.dispose()
