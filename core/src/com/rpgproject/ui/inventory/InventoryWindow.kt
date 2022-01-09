@@ -38,6 +38,8 @@ class InventoryWindow : Window, UIController {
     }
 
     private fun initUI(currencyIcon: Texture) {
+        val currencyDisplay = CurrencyDisplay(currencyIcon)
+        Inventory.onCurrencyChanged += currencyDisplay::update
         val rows = Inventory.items.size / slotsPerRow
         this.align(Align.bottomLeft)
         add(slotsTable).bottom().left()
@@ -99,8 +101,6 @@ class InventoryWindow : Window, UIController {
             }
         }
         slots[0].color = highlightColor
-//        val currencyDisplay = CurrencyDisplay(currencyIcon)
-//        Inventory.onCurrencyChanged += currencyDisplay::update
     }
 
     private fun onHighlightChanged(oldIndex: Int, newIndex: Int) {
